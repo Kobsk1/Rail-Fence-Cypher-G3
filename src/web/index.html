@@ -7,51 +7,73 @@
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-    <main class="container">
-        <h1>Rail Fence Cipher</h1>
+    <div class="container">
+        <header>
+            <h1>🔐 Rail Fence Cipher</h1>
+            <p class="subtitle">Encrypt, decrypt, and crack messages with the zigzag cipher</p>
+        </header>
 
-        <section class="panel">
-            <h2>Encrypt</h2>
-            <label>
-                Message
-                <textarea id="encrypt-input" rows="3" placeholder="Enter plaintext"></textarea>
-            </label>
-            <label>
-                Rails
-                <input id="encrypt-rails" type="number" min="2" value="3">
-            </label>
-            <button id="encrypt-btn">Encrypt</button>
-            <div class="output" id="encrypt-output"></div>
-        </section>
+        <div class="card">
+            <div class="tabs">
+                <button class="tab active" data-tab="encrypt">Encrypt</button>
+                <button class="tab" data-tab="decrypt">Decrypt</button>
+                <button class="tab" data-tab="brute">Brute Force</button>
+            </div>
 
-        <section class="panel">
-            <h2>Decrypt</h2>
-            <label>
-                Ciphertext
-                <textarea id="decrypt-input" rows="3" placeholder="Enter ciphertext"></textarea>
-            </label>
-            <label>
-                Rails
-                <input id="decrypt-rails" type="number" min="2" value="3">
-            </label>
-            <button id="decrypt-btn">Decrypt</button>
-            <div class="output" id="decrypt-output"></div>
-        </section>
+            <!-- Encrypt Tab -->
+            <div class="tab-content active" id="encrypt-tab">
+                <div class="form-group">
+                    <label for="encrypt-input">Message</label>
+                    <textarea id="encrypt-input" placeholder="Enter your plaintext message..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="encrypt-rails">Number of Rails</label>
+                    <input id="encrypt-rails" type="number" min="2" value="3">
+                    <div class="input-hint">Must be between 2 and message length - 1</div>
+                </div>
+                <button id="encrypt-btn">Encrypt Message</button>
+                <div class="output" id="encrypt-output">
+                    <div class="output-label">Encrypted Result</div>
+                    <div class="output-content"></div>
+                </div>
+            </div>
 
-        <section class="panel">
-            <h2>Brute Force</h2>
-            <label>
-                Ciphertext
-                <textarea id="bruteforce-input" rows="3" placeholder="Enter ciphertext"></textarea>
-            </label>
-            <label>
-                Max Rails (optional)
-                <input id="bruteforce-max-rails" type="number" min="2" placeholder="defaults to message length - 1">
-            </label>
-            <button id="bruteforce-btn">Run Brute Force</button>
-            <div class="output" id="bruteforce-output"></div>
-        </section>
-    </main>
+            <!-- Decrypt Tab -->
+            <div class="tab-content" id="decrypt-tab">
+                <div class="form-group">
+                    <label for="decrypt-input">Ciphertext</label>
+                    <textarea id="decrypt-input" placeholder="Enter encrypted message..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="decrypt-rails">Number of Rails</label>
+                    <input id="decrypt-rails" type="number" min="2" value="3">
+                    <div class="input-hint">Use the same number of rails that was used for encryption</div>
+                </div>
+                <button id="decrypt-btn">Decrypt Message</button>
+                <div class="output" id="decrypt-output">
+                    <div class="output-label">Decrypted Result</div>
+                    <div class="output-content"></div>
+                </div>
+            </div>
+
+            <!-- Brute Force Tab -->
+            <div class="tab-content" id="brute-tab">
+                <div class="form-group">
+                    <label for="bruteforce-input">Ciphertext</label>
+                    <textarea id="bruteforce-input" placeholder="Enter ciphertext to crack..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="bruteforce-max-rails">Max Rails (Optional)</label>
+                    <input id="bruteforce-max-rails" type="number" min="2" placeholder="Leave empty to try all possibilities">
+                    <div class="input-hint">Limits the number of rails to try (faster analysis)</div>
+                </div>
+                <button id="bruteforce-btn">Crack the Code</button>
+                <div class="output" id="bruteforce-output">
+                    <div class="output-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="scripts/cipher.js"></script>
     <script src="scripts/bruteforce.js"></script>
