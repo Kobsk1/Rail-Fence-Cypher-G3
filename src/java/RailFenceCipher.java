@@ -1,25 +1,5 @@
 import java.util.Scanner;
 
-/**
- * RAIL FENCE CIPHER PROGRAM
- * ==========================
- * 
- * How the Rail Fence Cipher Works:
- * ---------------------------------
- * The Rail Fence Cipher arranges text in a zigzag pattern across multiple "rails" (rows).
- * 
- * Example with 3 rails and plaintext "HELLO WORLD":
- * Rail 0: H       O       R
- * Rail 1:   E   W   L   D
- * Rail 2:     L       O
- * 
- * Reading row-by-row produces: "HOREWO LLLD"
- * 
- * To decrypt, we reverse the process by:
- * 1. Figuring out which positions belong to which rail
- * 2. Filling the rails with the ciphertext
- * 3. Reading the zigzag pattern to reconstruct the original message
- */
 public class RailFenceCipher {
     
     /**
@@ -81,52 +61,40 @@ public class RailFenceCipher {
             return ciphertext;
         }
         
-        // Create a 2D grid to mark positions in the zigzag pattern
-        char[][] fence = new char[rails][ciphertext.length()];
-        
-        // Mark the zigzag positions with a placeholder
+        // Build pattern of rail indices for each position
+        int[] pattern = new int[ciphertext.length()];
         int rail = 0;
         int direction = 1;
-        
-        for (int col = 0; col < ciphertext.length(); col++) {
-            fence[rail][col] = '*';  // Mark this position
-            
-            // Change direction at boundaries
-            if (rail == 0) {
-                direction = 1;
-            } else if (rail == rails - 1) {
-                direction = -1;
-            }
-            
+        for (int i = 0; i < ciphertext.length(); i++) {
+            pattern[i] = rail;
+            if (rail == 0) direction = 1;
+            else if (rail == rails - 1) direction = -1;
             rail += direction;
         }
         
-        // Fill the marked positions with actual ciphertext characters
-        int index = 0;
-        for (int row = 0; row < rails; row++) {
-            for (int col = 0; col < ciphertext.length(); col++) {
-                if (fence[row][col] == '*') {
-                    fence[row][col] = ciphertext.charAt(index);
-                    index++;
-                }
-            }
+        // Count characters per rail
+        int[] railCounts = new int[rails];
+        for (int r : pattern) {
+            railCounts[r]++;
         }
         
-        // Read the plaintext by following the zigzag pattern
+        // Slice ciphertext into rail buckets
+        char[][] buckets = new char[rails][];
+        int idx = 0;
+        for (int r = 0; r < rails; r++) {
+            buckets[r] = ciphertext.substring(idx, idx + railCounts[r]).toCharArray();
+            idx += railCounts[r];
+        }
+        
+        // Reconstruct plaintext following the pattern
         StringBuilder plaintext = new StringBuilder();
+        int[] bucketPos = new int[rails];
         rail = 0;
         direction = 1;
-        
-        for (int col = 0; col < ciphertext.length(); col++) {
-            plaintext.append(fence[rail][col]);
-            
-            // Change direction at boundaries
-            if (rail == 0) {
-                direction = 1;
-            } else if (rail == rails - 1) {
-                direction = -1;
-            }
-            
+        for (int i = 0; i < ciphertext.length(); i++) {
+            plaintext.append(buckets[rail][bucketPos[rail]++]);
+            if (rail == 0) direction = 1;
+            else if (rail == rails - 1) direction = -1;
             rail += direction;
         }
         
