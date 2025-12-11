@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rail Fence Cipher</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <main class="container">
+        <h1>Rail Fence Cipher</h1>
+
+        <section class="panel">
+            <h2>Encrypt</h2>
+            <label>
+                Message
+                <textarea id="encrypt-input" rows="3" placeholder="Enter plaintext"></textarea>
+            </label>
+            <label>
+                Rails
+                <input id="encrypt-rails" type="number" min="2" value="3">
+            </label>
+            <button id="encrypt-btn">Encrypt</button>
+            <div class="output" id="encrypt-output"></div>
+        </section>
+
+        <section class="panel">
+            <h2>Decrypt</h2>
+            <label>
+                Ciphertext
+                <textarea id="decrypt-input" rows="3" placeholder="Enter ciphertext"></textarea>
+            </label>
+            <label>
+                Rails
+                <input id="decrypt-rails" type="number" min="2" value="3">
+            </label>
+            <button id="decrypt-btn">Decrypt</button>
+            <div class="output" id="decrypt-output"></div>
+        </section>
+
+        <section class="panel">
+            <h2>Brute Force</h2>
+            <label>
+                Ciphertext
+                <textarea id="bruteforce-input" rows="3" placeholder="Enter ciphertext"></textarea>
+            </label>
+            <label>
+                Max Rails (optional)
+                <input id="bruteforce-max-rails" type="number" min="2" placeholder="defaults to message length - 1">
+            </label>
+            <button id="bruteforce-btn">Run Brute Force</button>
+            <div class="output" id="bruteforce-output"></div>
+        </section>
+    </main>
+
+    <script src="scripts/cipher.js"></script>
+    <script src="scripts/bruteforce.js"></script>
+    <script src="scripts/main.js"></script>
+</body>
+</html>
