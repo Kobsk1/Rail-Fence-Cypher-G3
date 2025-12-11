@@ -1,26 +1,103 @@
-import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.ArrayList;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.util.*;
+import java.nio.file.*;
+import java.io.IOException;
 
+/**
+ * Rail Fence Cipher Brute Force Attack
+ * Uses local wordlist files for offline dictionary validation
+ */
 public class bruteforce {
     
+    // Configuration: All wordlist files loaded for comprehensive dictionary coverage
+    private static final String[] WORDLIST_PATHS = {
+        "assets/all_words.txt",
+        "assets/words.txt",
+        "assets/dwyl.txt",
+        "assets/nouns.txt",
+        "assets/verbs.txt",
+        "assets/adjs.txt",
+        "assets/advs.txt",
+        "assets/adps.txt",
+        "assets/conjs.txt",
+        "assets/dets.txt",
+        "assets/nums.txt",
+        "assets/prons.txt",
+        "assets/prts.txt"
+    };
+    
+    // Common words get higher weight in scoring
+    private static final Map<String, Integer> COMMON_WORD_WEIGHT = new HashMap<>();
+    static {
+        COMMON_WORD_WEIGHT.put("the", 6);
+        COMMON_WORD_WEIGHT.put("and", 6);
+        COMMON_WORD_WEIGHT.put("for", 5);
+        COMMON_WORD_WEIGHT.put("are", 5);
+        COMMON_WORD_WEIGHT.put("you", 5);
+        COMMON_WORD_WEIGHT.put("this", 5);
+        COMMON_WORD_WEIGHT.put("that", 5);
+        COMMON_WORD_WEIGHT.put("with", 5);
+        COMMON_WORD_WEIGHT.put("meet", 5);
+        COMMON_WORD_WEIGHT.put("hello", 6);
+        COMMON_WORD_WEIGHT.put("hi", 3);
+        COMMON_WORD_WEIGHT.put("world", 5);
+        COMMON_WORD_WEIGHT.put("is", 4);
+        COMMON_WORD_WEIGHT.put("was", 4);
+        COMMON_WORD_WEIGHT.put("have", 4);
+    }
+    
+    // Cache for loaded wordlists
+    private static Set<String> wordSet = null;
+    
     /**
-     * Decrypts ciphertext using the Rail Fence Cipher.
-     * (Same implementation as in RailFenceCipher.java)
-     * 
+     * Loads all wordlist files and combines them into a single Set
+     * @return Set of all words from all wordlists
+     */
+    private static Set<String> loadWordSets() {
+        if (wordSet != null) return wordSet;
+        
+        wordSet = new HashSet<>();
+        
+        for (String path : WORDLIST_PATHS) {
+            try {
+                if (!Files.exists(Paths.get(path))) {
+                    System.err.println("Warning: Wordlist not found: " + path);
+                    continue;
+                }
+                
+                List<String> lines = Files.readAllLines(Paths.get(path));
+                for (String line : lines) {
+                    String word = line.trim().toLowerCase();
+                    if (word.length() >= 3) {
+                        wordSet.add(word);
+                    }
+                }
+            } catch (IOException e) {
+                System.err.println("Error loading wordlist " + path + ": " + e.getMessage());
+            }
+        }
+        
+        System.out.println("Loaded " + wordSet.size() + " words from " + WORDLIST_PATHS.length + " wordlist(s)");
+        return wordSet;
+    }
+    
+    /**
+     * Checks if a word exists in the loaded wordlists
+     * @param word Word to check (will be lowercased)
+     * @return True if word exists in wordlists
+     */
+    private static boolean isWordInDictionary(String word) {
+        if (word == null || word.length() < 3) return false;
+        Set<String> words = loadWordSets();
+        return words.contains(word.toLowerCase());
+    }
+    
+    /**
+     * Decrypts ciphertext using the Rail Fence Cipher
      * @param ciphertext The encrypted message
      * @param rails Number of rails used for encryption
      * @return The decrypted plaintext
      */
     public static String decrypt(String ciphertext, int rails) {
-        // Handle edge cases
         if (rails <= 1 || rails >= ciphertext.length()) {
             return ciphertext;
         }
@@ -65,117 +142,103 @@ public class bruteforce {
         return plaintext.toString();
     }
     
-    private static final Map<String, Boolean> dictionaryCache = new HashMap<>();
-    private static final Map<String, Integer> COMMON_WORD_WEIGHT = new HashMap<>();
-    static {
-        COMMON_WORD_WEIGHT.put("the", 6);
-        COMMON_WORD_WEIGHT.put("and", 6);
-        COMMON_WORD_WEIGHT.put("for", 5);
-        COMMON_WORD_WEIGHT.put("are", 5);
-        COMMON_WORD_WEIGHT.put("you", 5);
-        COMMON_WORD_WEIGHT.put("this", 5);
-        COMMON_WORD_WEIGHT.put("that", 5);
-        COMMON_WORD_WEIGHT.put("with", 5);
-        COMMON_WORD_WEIGHT.put("meet", 5);
-        COMMON_WORD_WEIGHT.put("hello", 6);
-        COMMON_WORD_WEIGHT.put("hi", 3);
-        COMMON_WORD_WEIGHT.put("world", 5);
+    /**
+     * Extracts token words from text (space-separated)
+     * @param text Input text
+     * @return List of words (length >= 3)
+     */
+    private static List<String> extractWords(String text) {
+        List<String> words = new ArrayList<>();
+        String[] tokens = text.toLowerCase().replaceAll("[^a-z\\s]", " ").split("\\s+");
+        for (String token : tokens) {
+            if (token.length() >= 3) {
+                words.add(token);
+            }
+        }
+        return words;
     }
     
     /**
-     * Check dictionary API for a word. Cached to reduce calls.
+     * Extracts substrings from words to catch concatenated words
+     * @param words List of words
+     * @param maxCount Maximum number of substrings to extract
+     * @return List of substrings (length 3-8)
      */
-    public static boolean isRealWord(String word) {
-        if (word == null || word.length() < 3) return false;
-        if (dictionaryCache.containsKey(word)) return dictionaryCache.get(word);
+    private static List<String> extractSubstrings(List<String> words, int maxCount) {
+        List<String> substrings = new ArrayList<>();
         
-        try {
-            String urlStr = "https://api.dictionaryapi.dev/api/v2/entries/en/" + word;
-            URL url = new URL(urlStr);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setConnectTimeout(2000);
-            conn.setReadTimeout(2000);
-            
-            boolean ok = conn.getResponseCode() == 200;
-            dictionaryCache.put(word, ok);
-            return ok;
-        } catch (Exception e) {
-            dictionaryCache.put(word, false);
-            return false;
-        }
-    }
-    
-    private static List<String> collectTokenWords(String text) {
-        List<String> tokens = new ArrayList<>();
-        String[] cleanWords = text.toLowerCase().replaceAll("[^a-z\\s]", " ").split("\\s+");
-        for (String w : cleanWords) {
-            if (w.length() >= 3) tokens.add(w);
-        }
-        return tokens;
-    }
-    
-    private static List<String> collectSubstrings(List<String> words, int cap) {
-        List<String> result = new ArrayList<>();
         for (String word : words) {
             int maxLen = Math.min(8, word.length());
             for (int len = maxLen; len >= 3; len--) {
                 for (int i = 0; i <= word.length() - len; i++) {
-                    result.add(word.substring(i, i + len));
-                    if (result.size() >= cap) return result;
+                    substrings.add(word.substring(i, i + len));
+                    if (substrings.size() >= maxCount) return substrings;
                 }
             }
         }
-        return result;
+        
+        return substrings;
     }
     
     /**
-     * Dictionary-based score aligned with the web version.
+     * Scores plaintext based on dictionary word matches
+     * @param text Plaintext to score
+     * @return Score (higher = more likely correct)
      */
     public static double calculateReadabilityScore(String text) {
         if (text == null || text.isEmpty()) {
             return 0.0;
         }
         
-        List<String> tokens = collectTokenWords(text);
-        List<String> candidates = collectSubstrings(tokens, 15);
-        int hits = 0;
+        loadWordSets();
+        
+        List<String> words = extractWords(text);
+        List<String> substrings = extractSubstrings(words, 15);
+        
+        int totalHits = 0;
+        int weightedScore = 0;
         int checked = 0;
-        int weighted = 0;
+        final int maxChecks = 30;
         
-        // Check full tokens first
-        for (String word : tokens) {
-            if (checked >= 15) break;
-            if (isRealWord(word)) {
-                hits++;
-                weighted += (COMMON_WORD_WEIGHT.getOrDefault(word, 1) * Math.max(word.length(), 3));
+        // Check full words first (stronger signal)
+        for (String word : words) {
+            if (checked >= maxChecks) break;
+            
+            if (isWordInDictionary(word)) {
+                totalHits++;
+                int weight = COMMON_WORD_WEIGHT.getOrDefault(word, 1);
+                weightedScore += weight * Math.max(word.length(), 3);
             }
             checked++;
         }
         
-        // Then substrings to capture concatenated words
-        for (String word : candidates) {
-            if (checked >= 15) break;
-            if (isRealWord(word)) {
-                hits++;
-                weighted += (COMMON_WORD_WEIGHT.getOrDefault(word, 1) * Math.max(word.length(), 3));
+        // Check substrings to catch concatenated words
+        for (String substr : substrings) {
+            if (checked >= maxChecks) break;
+            
+            if (isWordInDictionary(substr)) {
+                totalHits++;
+                int weight = COMMON_WORD_WEIGHT.getOrDefault(substr, 1);
+                weightedScore += weight * Math.max(substr.length(), 3);
             }
             checked++;
         }
         
-        int spacing = 0;
+        // Calculate additional scoring factors
+        int spacingCount = 0;
         for (char c : text.toCharArray()) {
-            if (c == ' ') spacing++;
+            if (c == ' ') spacingCount++;
         }
         
-        double coverage = checked > 0 ? (double) hits / checked : 0.0;
-        double zeroPenalty = hits == 0 ? -10.0 : 0.0;
-        return weighted + coverage * 5.0 + spacing * 0.2 + zeroPenalty;
+        double coverageScore = checked > 0 ? ((double) totalHits / checked) * 5.0 : 0.0;
+        double spacingScore = spacingCount * 0.2;
+        double zeroPenalty = totalHits == 0 ? -10.0 : 0.0;
+        
+        return weightedScore + coverageScore + spacingScore + zeroPenalty;
     }
     
     /**
-     * Performs a brute force attack on the ciphertext by trying all possible keys.
-     * 
+     * Performs a brute force attack on the ciphertext by trying all possible keys
      * @param ciphertext The encrypted message to crack
      */
     public static void bruteForceAttack(String ciphertext) {
@@ -233,7 +296,7 @@ public class bruteforce {
     }
     
     /**
-     * Helper class to store decryption results.
+     * Helper class to store decryption results
      */
     static class DecryptionResult {
         int rails;
@@ -248,16 +311,19 @@ public class bruteforce {
     }
     
     /**
-     * Main method to run the brute force program.
+     * Main method to run the brute force program
      */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         
         System.out.println("==================================================");
-        System.out.println("   RAIL FENCE CIPHER - BRUTE FORCE (Dictionary)");
+        System.out.println("   RAIL FENCE CIPHER - BRUTE FORCE (Offline)");
         System.out.println("==================================================");
-        System.out.println("\nUses free dictionary API to pick the most likely rails.");
+        System.out.println("\nUses local wordlist files to pick the most likely rails.");
         System.out.println();
+        
+        // Pre-load wordlists
+        loadWordSets();
         
         boolean running = true;
         
