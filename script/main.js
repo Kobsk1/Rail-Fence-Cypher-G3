@@ -78,17 +78,73 @@ document.getElementById("encrypt-btn").addEventListener("click", () => {
     
     if (!text.trim()) {
         showOutput("encrypt-output", "Please enter a message to encrypt", true);
+        hideOutput("encrypt-visual-output");
         return;
     }
     
     try {
         const rails = parseRails("encrypt-rails", Math.max(text.length, 3));
-        const output = railFenceEncrypt(text, rails);
-        showOutput("encrypt-output", output);
+        const ciphertext = railFenceEncrypt(text, rails);
+        showOutput("encrypt-output", ciphertext);
+
+        // Build and show visual rail pattern for this encryption
+        const visualHtml = buildRailVisualization(text, rails);
+        showOutput("encrypt-visual-output", visualHtml);
     } catch (err) {
         showOutput("encrypt-output", err.message, true);
+        hideOutput("encrypt-visual-output");
     }
 });
+
+/**
+ * Builds an HTML table showing the rail fence pattern for a given plaintext
+ * @param {string} text - Plaintext message
+ * @param {number} rails - Number of rails
+ * @returns {string} HTML table
+ */
+function buildRailVisualization(text, rails) {
+    if (rails <= 1 || rails >= text.length) {
+        return "<div style=\"color:#718096; font-size:14px;\">Rail pattern is trivial when rails ≤ 1 or rails ≥ message length.</div>";
+    }
+
+    // Create empty grid [rails][text.length]
+    const grid = Array.from({ length: rails }, () =>
+        Array.from({ length: text.length }, () => "")
+    );
+
+    let rail = 0;
+    let direction = 1;
+    for (let i = 0; i < text.length; i++) {
+        grid[rail][i] = text[i];
+        if (rail === 0) direction = 1;
+        else if (rail === rails - 1) direction = -1;
+        rail += direction;
+    }
+
+    // Build HTML table
+    let html = '<table class="rail-visual"><thead><tr><th>Rail</th>';
+    for (let i = 0; i < text.length; i++) {
+        html += `<th>${i + 1}</th>`;
+    }
+    html += '</tr></thead><tbody>';
+
+    for (let r = 0; r < rails; r++) {
+        html += `<tr><th>${r + 1}</th>`;
+        for (let c = 0; c < text.length; c++) {
+            const ch = grid[r][c];
+            if (ch === "") {
+                html += '<td class="empty">·</td>';
+            } else {
+                const safe = escapeHtml(ch);
+                html += `<td>${safe}</td>`;
+            }
+        }
+        html += '</tr>';
+    }
+
+    html += '</tbody></table>';
+    return html;
+}
 
 // Decrypt Button Handler
 document.getElementById("decrypt-btn").addEventListener("click", () => {
