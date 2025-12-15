@@ -129,9 +129,9 @@ document.getElementById("bruteforce-btn").addEventListener("click", async () => 
     const maxRails = railsValue ? Number(railsValue) : undefined;
 
     try {
-        const { best, attempts } = await bruteForceCipher(text, maxRails);
+        const attempts = await bruteForceCipher(text, maxRails);
         
-        if (!best || attempts.length === 0) {
+        if (!attempts || attempts.length === 0) {
             showOutput("bruteforce-output", "No results found", true);
             return;
         }
@@ -139,28 +139,19 @@ document.getElementById("bruteforce-btn").addEventListener("click", async () => 
         // Build HTML for results display
         let html = '<div class="output-label">Analysis Results</div>';
         
-        // Show top 10 results
-        const topResults = attempts.slice(0, 10);
-        topResults.forEach((attempt, idx) => {
-            const isBest = idx === 0;
+        // Show all results in ascending rail order
+        attempts.forEach((attempt) => {
             html += `
-                <div class="brute-result ${isBest ? 'best' : ''}">
+                <div class="brute-result">
                     <div class="result-header">
-                        <span class="${isBest ? 'best-badge' : 'rails-badge'}">
-                            ${isBest ? `✓ Best Match – ${attempt.rails} Rails` : `${attempt.rails} Rails`}
+                        <span class="rails-badge">
+                            ${attempt.rails} Rails
                         </span>
-                        <span class="score">Score: ${attempt.score.toFixed(1)}</span>
                     </div>
                     <div class="result-text">${escapeHtml(attempt.plaintext)}</div>
                 </div>
             `;
         });
-        
-        if (attempts.length > 10) {
-            html += `<div style="text-align: center; color: #718096; font-size: 14px; margin-top: 12px;">
-                Showing top 10 of ${attempts.length} results
-            </div>`;
-        }
         
         contentEl.innerHTML = html;
     } catch (err) {

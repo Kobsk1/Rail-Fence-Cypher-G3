@@ -1,155 +1,16 @@
 /**
  * Rail Fence Cipher Brute Force Attack
- * Uses local wordlist files for offline dictionary validation
+ * 
+ * This simplified version no longer tries to guess the "best" plaintext.
+ * It simply decrypts the ciphertext with every possible rail count and
+ * returns the list of all results in ascending rail order.
  */
-
-// Configuration: All wordlist files loaded for comprehensive dictionary coverage
-const WORDLIST_URLS = [
-    "assets/all_words.txt",
-    "assets/words.txt",
-    "assets/dwyl.txt",
-    "assets/nouns.txt",
-    "assets/verbs.txt",
-    "assets/adjs.txt",
-    "assets/advs.txt",
-    "assets/adps.txt",
-    "assets/conjs.txt",
-    "assets/dets.txt",
-    "assets/nums.txt",
-    "assets/prons.txt",
-    "assets/prts.txt"
-];
-
-// Common words get higher weight in scoring
-const COMMON_WORD_WEIGHT = new Map([
-    ["the", 6], ["and", 6], ["for", 5], ["are", 5], ["you", 5],
-    ["this", 5], ["that", 5], ["with", 5], ["meet", 5], ["hello", 6],
-    ["hi", 3], ["world", 5], ["is", 4], ["was", 4], ["have", 4]
-]);
-
-// Cache for loaded wordlists
-let wordSetCache = null;
-let wordSetPromise = null;
-
-/**
- * Loads all wordlist files and combines them into a single Set
- * @returns {Promise<Set<string>>} Set of all words from all wordlists
- */
-async function loadWordSets() {
-    if (wordSetPromise) return wordSetPromise;
-    
-    wordSetPromise = (async () => {
-        const combinedSet = new Set();
-        
-        for (const url of WORDLIST_URLS) {
-            try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    console.warn(`Failed to load wordlist: ${url}`);
-                    continue;
-                }
-                
-                const text = await response.text();
-                const words = text
-                    .split(/\r?\n/)
-                    .map(w => w.trim().toLowerCase())
-                    .filter(w => w.length >= 3);
-                
-                words.forEach(w => combinedSet.add(w));
-            } catch (error) {
-                console.warn(`Error loading wordlist ${url}:`, error);
-            }
-        }
-        
-        wordSetCache = combinedSet;
-        console.log(`Loaded ${combinedSet.size} words from ${WORDLIST_URLS.length} wordlist(s)`);
-        return combinedSet;
-    })();
-    
-    return wordSetPromise;
-}
-
-/**
- * Checks if a word exists in the loaded wordlists
- * @param {string} word - Word to check (will be lowercased)
- * @returns {boolean} True if word exists in wordlists
- */
-function isWordInDictionary(word) {
-    if (!word || word.length < 3) return false;
-    if (!wordSetCache) return false;
-    return wordSetCache.has(word.toLowerCase());
-}
-
-/**
- * Extracts token words from text (space-separated)
- * @param {string} text - Input text
- * @returns {string[]} Array of words (length >= 3)
- */
-function extractWords(text) {
-    return text
-        .toLowerCase()
-        .replace(/[^a-z\s]/g, " ")
-        .split(/\s+/)
-        .filter(w => w.length >= 3);
-}
-
-/**
- * Extracts substrings from words to catch concatenated words
- * @param {string[]} words - Array of words
- * @param {number} maxCount - Maximum number of substrings to extract
- * @returns {string[]} Array of substrings (length 3-8)
- */
-function extractSubstrings(words, maxCount = 15) {
-    const substrings = [];
-    
-    for (const word of words) {
-        const maxLen = Math.min(8, word.length);
-        for (let len = maxLen; len >= 3; len--) {
-            for (let i = 0; i <= word.length - len; i++) {
-                substrings.push(word.slice(i, i + len));
-                if (substrings.length >= maxCount) return substrings;
-            }
-        }
-    }
-    
-    return substrings;
-}
-
-/**
- * Scores plaintext based on dictionary word matches
- * @param {string} text - Plaintext to score
- * @returns {Promise<number>} Score (higher = more likely correct)
- */
-async function scorePlaintext(text) {
-    if (!text || text.length === 0) return 0;
-    
-    // Ensure wordlists are loaded
-    await loadWordSets();
-    
-    const words = extractWords(text);
-    
-    let totalHits = 0;
-    let score = 0;
-    
-    for (const word of words) {
-        if (isWordInDictionary(word)) {
-            totalHits++;
-            score += Math.max(word.length, 3);
-        }
-    }
-    
-    // Bonus for high hit rate
-    const hitRate = words.length > 0 ? totalHits / words.length : 0;
-    score += hitRate * 10;
-    
-    return score;
-}
 
 /**
  * Performs brute force attack on ciphertext
  * @param {string} ciphertext - Encrypted message
  * @param {number} maxRails - Maximum number of rails to try (optional)
- * @returns {Promise<{best: Object, attempts: Array}>} Results with best guess and all attempts
+ * @returns {Promise<Array<{rails: number, plaintext: string}>>} All attempts
  */
 async function bruteForceCipher(ciphertext, maxRails) {
     const limit = Math.min(
@@ -158,22 +19,13 @@ async function bruteForceCipher(ciphertext, maxRails) {
     );
     
     const attempts = [];
-    let best = null;
     
-    // Try all possible rail counts
+    // Try all possible rail counts from 2..limit
     for (let rails = 2; rails <= limit; rails++) {
         const plaintext = railFenceDecrypt(ciphertext, rails);
-        const score = await scorePlaintext(plaintext);
-        const result = { rails, plaintext, score };
-        attempts.push(result);
-        
-        if (!best || score > best.score) {
-            best = result;
-        }
+        attempts.push({ rails, plaintext });
     }
     
-    // Sort by score (descending)
-    attempts.sort((a, b) => b.score - a.score);
-    
-    return { best, attempts };
+    // Already generated in ascending rail order
+    return attempts;
 }
