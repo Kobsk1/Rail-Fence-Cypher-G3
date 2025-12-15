@@ -147,7 +147,7 @@ document.getElementById("bruteforce-btn").addEventListener("click", async () => 
                 <div class="brute-result ${isBest ? 'best' : ''}">
                     <div class="result-header">
                         <span class="${isBest ? 'best-badge' : 'rails-badge'}">
-                            ${isBest ? '✓ Best Match' : `${attempt.rails} Rails`}
+                            ${isBest ? `✓ Best Match – ${attempt.rails} Rails` : `${attempt.rails} Rails`}
                         </span>
                         <span class="score">Score: ${attempt.score.toFixed(1)}</span>
                     </div>
