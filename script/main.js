@@ -16,7 +16,7 @@ function showOutput(outputId, content, isError = false) {
         // HTML content
         contentEl.innerHTML = content;
     } else {
-        // Plain text content
+        // Plain text content - preserve spacing
         contentEl.textContent = content;
     }
     
@@ -46,8 +46,8 @@ function hideOutput(outputId) {
  */
 function parseRails(inputId, textLength) {
     const value = Number(document.getElementById(inputId).value);
-    if (!Number.isInteger(value) || value < 2 || value >= textLength) {
-        throw new Error("Rails must be between 2 and message length - 1");
+    if (!Number.isInteger(value) || value < 2) {
+        throw new Error("Rails must be at least 2");
     }
     return value;
 }
@@ -69,16 +69,14 @@ document.querySelectorAll('.tab').forEach(tab => {
         hideOutput('encrypt-output');
         hideOutput('decrypt-output');
         hideOutput('bruteforce-output');
+        hideOutput('encrypt-visual-output');
     });
 });
 
 // Encrypt Button Handler
 document.getElementById("encrypt-btn").addEventListener("click", () => {
     const rawText = document.getElementById("encrypt-input").value;
-    // Normalize: keep only alphabetic characters and spaces, then lowercase
-    const text = rawText
-        .toLowerCase()
-        .replace(/[^a-z\s]/g, "");
+    const text = rawText.toUpperCase(); // Keep uppercase like the working site
     
     if (!text.trim()) {
         showOutput("encrypt-output", "Please enter a message to encrypt", true);
@@ -87,10 +85,9 @@ document.getElementById("encrypt-btn").addEventListener("click", () => {
     }
     
     try {
-        const rails = parseRails("encrypt-rails", Math.max(text.length, 3));
+        const rails = parseRails("encrypt-rails", text.length);
         const ciphertext = railFenceEncrypt(text, rails);
-        // Show ciphertext in uppercase
-        showOutput("encrypt-output", ciphertext.toUpperCase());
+        showOutput("encrypt-output", ciphertext);
 
         // Build and show visual rail pattern for this encryption
         const visualHtml = buildRailVisualization(text, rails);
@@ -108,8 +105,8 @@ document.getElementById("encrypt-btn").addEventListener("click", () => {
  * @returns {string} HTML table
  */
 function buildRailVisualization(text, rails) {
-    if (rails <= 1 || rails >= text.length) {
-        return "<div style=\"color:#718096; font-size:14px;\">Rail pattern is trivial when rails ≤ 1 or rails ≥ message length.</div>";
+    if (rails <= 1) {
+        return "<div style=\"color:#718096; font-size:14px;\">Rail pattern is trivial when rails ≤ 1.</div>";
     }
 
     // Create empty grid [rails][text.length]
@@ -146,7 +143,6 @@ function buildRailVisualization(text, rails) {
         }
         html += '</tr>';
     }
-
     html += '</tbody></table>';
     return html;
 }
@@ -162,8 +158,8 @@ document.getElementById("decrypt-btn").addEventListener("click", () => {
     }
     
     try {
-        const rails = parseRails("decrypt-rails", Math.max(text.length, 3));
-        const plaintext = railFenceDecrypt(text, rails).toLowerCase();
+        const rails = parseRails("decrypt-rails", text.length);
+        const plaintext = railFenceDecrypt(text, rails);
         showOutput("decrypt-output", plaintext);
     } catch (err) {
         showOutput("decrypt-output", err.message, true);
@@ -206,9 +202,7 @@ document.getElementById("bruteforce-btn").addEventListener("click", async () => 
             html += `
                 <div class="brute-result">
                     <div class="result-header">
-                        <span class="rails-badge">
-                            ${attempt.rails} Rails
-                        </span>
+                        <span class="rails-badge">${attempt.rails} Rails</span>
                     </div>
                     <div class="result-text">${escapeHtml(attempt.plaintext)}</div>
                 </div>

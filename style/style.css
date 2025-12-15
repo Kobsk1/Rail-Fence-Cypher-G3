@@ -82,7 +82,7 @@ h1 {
 
 .tab-content {
     display: none;
-    padding: 32px;
+    padding: 28px;
     animation: fadeIn 0.3s;
 }
 
@@ -103,7 +103,7 @@ label {
     display: block;
     font-weight: 600;
     font-size: 14px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     color: #2d3748;
 }
 
@@ -135,12 +135,15 @@ textarea {
 .input-hint {
     font-size: 13px;
     color: #718096;
-    margin-top: 4px;
+    margin-top: 6px;
+    line-height: 1.4;
 }
 
 button {
     width: 100%;
     padding: 14px;
+    margin-top: 8px;
+    margin-bottom: 8px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
@@ -177,6 +180,10 @@ button:disabled {
     display: none;
 }
 
+.output + .output {
+    margin-top: 16px;
+}
+
 .output.show {
     display: block;
     animation: slideIn 0.3s;
@@ -192,7 +199,7 @@ button:disabled {
     font-weight: 600;
     text-transform: uppercase;
     color: #667eea;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     letter-spacing: 0.5px;
 }
 
@@ -201,6 +208,8 @@ button:disabled {
     line-height: 1.6;
     color: #2d3748;
     word-break: break-word;
+    white-space: pre-wrap;
+    word-spacing: normal;
 }
 
 .loading {
@@ -224,41 +233,47 @@ button:disabled {
 }
 
 .brute-result {
-    margin-bottom: 16px;
-    padding: 16px;
+    margin-bottom: 4px;
+    padding: 10px 12px;
     background: white;
-    border-radius: 8px;
-    border: 2px solid #e2e8f0;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
     transition: all 0.2s;
+}
+
+.brute-result:last-child {
+    margin-bottom: 0;
 }
 
 .brute-result:hover {
     border-color: #667eea;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+    box-shadow: 0 1px 4px rgba(102, 126, 234, 0.1);
 }
 
 .result-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .rails-badge {
     display: inline-block;
-    padding: 4px 12px;
+    padding: 2px 8px;
     background: #667eea;
     color: white;
-    border-radius: 12px;
-    font-size: 13px;
+    border-radius: 10px;
+    font-size: 11px;
     font-weight: 600;
 }
 
 .result-text {
-    font-size: 15px;
+    font-size: 13px;
     color: #2d3748;
-    line-height: 1.5;
+    line-height: 1.4;
     word-break: break-word;
+    white-space: pre-wrap;
+    margin-top: 4px;
 }
 
 /* Rail visualization (encryption) */
@@ -267,14 +282,15 @@ button:disabled {
     border-collapse: collapse;
     margin-top: 12px;
     font-size: 14px;
+    font-family: 'Courier New', monospace;
 }
 
 .rail-visual th,
 .rail-visual td {
     border: 1px solid #e2e8f0;
-    padding: 4px 6px;
+    padding: 8px 6px;
     text-align: center;
-    min-width: 20px;
+    min-width: 24px;
 }
 
 .rail-visual th {

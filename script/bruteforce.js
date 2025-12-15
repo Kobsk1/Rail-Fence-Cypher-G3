@@ -15,7 +15,7 @@
 async function bruteForceCipher(ciphertext, maxRails) {
     const limit = Math.min(
         Math.max(2, maxRails || ciphertext.length - 1),
-        ciphertext.length - 1
+        Math.max(2, ciphertext.length - 1)
     );
     
     const attempts = [];
