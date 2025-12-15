@@ -74,7 +74,11 @@ document.querySelectorAll('.tab').forEach(tab => {
 
 // Encrypt Button Handler
 document.getElementById("encrypt-btn").addEventListener("click", () => {
-    const text = document.getElementById("encrypt-input").value;
+    const rawText = document.getElementById("encrypt-input").value;
+    // Normalize: keep only alphabetic characters and spaces, then lowercase
+    const text = rawText
+        .toLowerCase()
+        .replace(/[^a-z\s]/g, "");
     
     if (!text.trim()) {
         showOutput("encrypt-output", "Please enter a message to encrypt", true);
@@ -85,7 +89,8 @@ document.getElementById("encrypt-btn").addEventListener("click", () => {
     try {
         const rails = parseRails("encrypt-rails", Math.max(text.length, 3));
         const ciphertext = railFenceEncrypt(text, rails);
-        showOutput("encrypt-output", ciphertext);
+        // Show ciphertext in uppercase
+        showOutput("encrypt-output", ciphertext.toUpperCase());
 
         // Build and show visual rail pattern for this encryption
         const visualHtml = buildRailVisualization(text, rails);
@@ -148,7 +153,8 @@ function buildRailVisualization(text, rails) {
 
 // Decrypt Button Handler
 document.getElementById("decrypt-btn").addEventListener("click", () => {
-    const text = document.getElementById("decrypt-input").value;
+    const rawText = document.getElementById("decrypt-input").value;
+    const text = rawText.toUpperCase();
     
     if (!text.trim()) {
         showOutput("decrypt-output", "Please enter ciphertext to decrypt", true);
@@ -157,8 +163,8 @@ document.getElementById("decrypt-btn").addEventListener("click", () => {
     
     try {
         const rails = parseRails("decrypt-rails", Math.max(text.length, 3));
-        const output = railFenceDecrypt(text, rails);
-        showOutput("decrypt-output", output);
+        const plaintext = railFenceDecrypt(text, rails).toLowerCase();
+        showOutput("decrypt-output", plaintext);
     } catch (err) {
         showOutput("decrypt-output", err.message, true);
     }
