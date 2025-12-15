@@ -127,44 +127,22 @@ async function scorePlaintext(text) {
     await loadWordSets();
     
     const words = extractWords(text);
-    const substrings = extractSubstrings(words, 15);
     
     let totalHits = 0;
-    let weightedScore = 0;
-    let checked = 0;
-    const maxChecks = 30;
+    let score = 0;
     
-    // Check full words first (stronger signal)
     for (const word of words) {
-        if (checked >= maxChecks) break;
-        
         if (isWordInDictionary(word)) {
             totalHits++;
-            const weight = COMMON_WORD_WEIGHT.get(word) || 1;
-            weightedScore += weight * Math.max(word.length, 3);
+            score += Math.max(word.length, 3);
         }
-        checked++;
     }
     
-    // Check substrings to catch concatenated words
-    for (const substr of substrings) {
-        if (checked >= maxChecks) break;
-        
-        if (isWordInDictionary(substr)) {
-            totalHits++;
-            const weight = COMMON_WORD_WEIGHT.get(substr) || 1;
-            weightedScore += weight * Math.max(substr.length, 3);
-        }
-        checked++;
-    }
+    // Bonus for high hit rate
+    const hitRate = words.length > 0 ? totalHits / words.length : 0;
+    score += hitRate * 10;
     
-    // Calculate additional scoring factors
-    const spacingCount = (text.match(/\s/g) || []).length;
-    const coverageScore = checked > 0 ? (totalHits / checked) * 5 : 0;
-    const spacingScore = spacingCount * 0.2;
-    const zeroPenalty = totalHits === 0 ? -10 : 0;
-    
-    return weightedScore + coverageScore + spacingScore + zeroPenalty;
+    return score;
 }
 
 /**

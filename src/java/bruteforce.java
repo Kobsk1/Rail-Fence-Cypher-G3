@@ -193,48 +193,22 @@ public class bruteforce {
         loadWordSets();
         
         List<String> words = extractWords(text);
-        List<String> substrings = extractSubstrings(words, 15);
         
         int totalHits = 0;
-        int weightedScore = 0;
-        int checked = 0;
-        final int maxChecks = 30;
+        double score = 0.0;
         
-        // Check full words first (stronger signal)
         for (String word : words) {
-            if (checked >= maxChecks) break;
-            
             if (isWordInDictionary(word)) {
                 totalHits++;
-                int weight = COMMON_WORD_WEIGHT.getOrDefault(word, 1);
-                weightedScore += weight * Math.max(word.length(), 3);
+                score += Math.max(word.length(), 3);
             }
-            checked++;
         }
         
-        // Check substrings to catch concatenated words
-        for (String substr : substrings) {
-            if (checked >= maxChecks) break;
-            
-            if (isWordInDictionary(substr)) {
-                totalHits++;
-                int weight = COMMON_WORD_WEIGHT.getOrDefault(substr, 1);
-                weightedScore += weight * Math.max(substr.length(), 3);
-            }
-            checked++;
-        }
+        // Bonus for high hit rate
+        double hitRate = words.size() > 0 ? (double) totalHits / words.size() : 0.0;
+        score += hitRate * 10.0;
         
-        // Calculate additional scoring factors
-        int spacingCount = 0;
-        for (char c : text.toCharArray()) {
-            if (c == ' ') spacingCount++;
-        }
-        
-        double coverageScore = checked > 0 ? ((double) totalHits / checked) * 5.0 : 0.0;
-        double spacingScore = spacingCount * 0.2;
-        double zeroPenalty = totalHits == 0 ? -10.0 : 0.0;
-        
-        return weightedScore + coverageScore + spacingScore + zeroPenalty;
+        return score;
     }
     
     /**
