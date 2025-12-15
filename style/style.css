@@ -261,6 +261,33 @@ button:disabled {
     word-break: break-word;
 }
 
+/* Rail visualization (encryption) */
+.rail-visual {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+.rail-visual th,
+.rail-visual td {
+    border: 1px solid #e2e8f0;
+    padding: 4px 6px;
+    text-align: center;
+    min-width: 20px;
+}
+
+.rail-visual th {
+    background: #edf2f7;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.rail-visual td.empty {
+    background: #f7fafc;
+    color: #cbd5e0;
+}
+
 @media (max-width: 640px) {
     h1 {
         font-size: 2rem;
