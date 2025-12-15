@@ -22,39 +22,42 @@ function railFenceDecrypt(ciphertext, rails) {
         return ciphertext;
     }
 
-    // Track rail assignment for each character position
-    const pattern = [];
+    // Build pattern of rail indices for each position (mirror Java implementation)
+    const pattern = new Array(ciphertext.length);
     let rail = 0;
     let direction = 1;
     for (let i = 0; i < ciphertext.length; i++) {
-        pattern.push(rail);
+        pattern[i] = rail;
         if (rail === 0) direction = 1;
         else if (rail === rails - 1) direction = -1;
         rail += direction;
     }
 
-    // Count how many chars belong to each rail
-    const railCounts = Array(rails).fill(0);
-    pattern.forEach((r) => railCounts[r]++);
+    // Count characters per rail
+    const railCounts = new Array(rails).fill(0);
+    for (const r of pattern) {
+        railCounts[r]++;
+    }
 
     // Slice ciphertext into rail buckets
-    const railsBuckets = [];
+    const buckets = new Array(rails);
     let idx = 0;
     for (let r = 0; r < rails; r++) {
-        railsBuckets[r] = ciphertext.slice(idx, idx + railCounts[r]).split("");
+        buckets[r] = ciphertext.slice(idx, idx + railCounts[r]).split("");
         idx += railCounts[r];
     }
 
-    // Rebuild plaintext following the pattern
-    const result = [];
+    // Reconstruct plaintext following the pattern
+    const bucketPos = new Array(rails).fill(0);
+    let result = "";
     rail = 0;
     direction = 1;
     for (let i = 0; i < ciphertext.length; i++) {
-        result.push(railsBuckets[rail].shift());
+        result += buckets[rail][bucketPos[rail]++];
         if (rail === 0) direction = 1;
         else if (rail === rails - 1) direction = -1;
         rail += direction;
     }
 
-    return result.join("");
+    return result;
 }
