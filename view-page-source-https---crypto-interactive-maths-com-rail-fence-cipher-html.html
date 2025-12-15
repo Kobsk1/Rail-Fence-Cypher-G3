@@ -1,0 +1,2559 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Rail Fence Cipher - Crypto Corner</title><meta property="og:site_name" content="Crypto Corner" />
+<meta property="og:title" content="Rail Fence Cipher" />
+<meta property="og:description" content="The Rail Fence Cipher is a transposition cipher that uses a table that looks a bit like an old rail fence viewed from above," />
+<meta property="og:image" content="https://crypto.interactive-maths.com/uploads/1/1/3/4/11345755/3139303.jpg?410" />
+<meta property="og:image" content="https://crypto.interactive-maths.com/uploads/1/1/3/4/11345755/3703653.jpg?468" />
+<meta property="og:image" content="https://crypto.interactive-maths.com/uploads/1/1/3/4/11345755/3501167.jpg?617" />
+<meta property="og:image" content="https://crypto.interactive-maths.com/uploads/1/1/3/4/11345755/5408178.jpg?613" />
+<meta property="og:image" content="https://crypto.interactive-maths.com/uploads/1/1/3/4/11345755/6436979.jpg?613" />
+<meta property="og:image" content="https://crypto.interactive-maths.com/uploads/1/1/3/4/11345755/8763679.jpg?610" />
+<meta property="og:image" content="https://crypto.interactive-maths.com/uploads/1/1/3/4/11345755/232136.jpg?520" />
+<meta property="og:url" content="https://crypto.interactive-maths.com/rail-fence-cipher.html" />
+
+<meta name="description" content="The Rail Fence Cipher is a transposition cipher that uses a table that looks a bit like an old rail fence viewed from above," />
+<meta name="keywords" content="railfence, railfence cipher, rail fence, rail fence cipher,cryptography, codes, codebreaking, cipher, transposition, transposition cipher, permutation cipher, permutation" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<meta name="google-site-verification" content="I_881cvtmazQ0UoYC52DQs3-dP_uvSQAfQiKgege71k" />
+<script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="interactivemaths" data-description="Support me on Buy me a coffee!" data-message="Thanks for visiting Crypto Corner! You can support the site here." data-color="#BD5FFF" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+<script async src="https://fundingchoicesmessages.google.com/i/pub-6012495557192475?ers=1" nonce="5DD-7Qnlq--WLvXlyFhTWQ"></script><script nonce="5DD-7Qnlq--WLvXlyFhTWQ">(function() {function signalGooglefcPresent() {if (!window.frames['googlefcPresent']) {if (document.body) {const iframe = document.createElement('iframe'); iframe.style = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;'; iframe.style.display = 'none'; iframe.name = 'googlefcPresent'; document.body.appendChild(iframe);} else {setTimeout(signalGooglefcPresent, 0);}}}signalGooglefcPresent();})();</script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6012495557192475"
+     crossorigin="anonymous"></script>
+		<link id="wsite-base-style" rel="stylesheet" type="text/css" href="//cdn2.editmysite.com/css/sites.css?buildTime=1695407040" />
+<link rel="stylesheet" type="text/css" href="//cdn2.editmysite.com/css/old/fancybox.css?1695407040" />
+<link rel="stylesheet" type="text/css" href="//cdn2.editmysite.com/css/social-icons.css?buildtime=1695407040" media="screen,projection" />
+<link rel="stylesheet" type="text/css" href="/files/main_style.css?1695410986" title="wsite-theme-css" />
+<link href='//cdn2.editmysite.com/fonts/Montserrat/font.css?2' rel='stylesheet' type='text/css' />
+
+<link href='//cdn2.editmysite.com/fonts/Quicksand/font.css?2' rel='stylesheet' type='text/css' />
+<link href='//cdn2.editmysite.com/fonts/Quicksand/font.css?2' rel='stylesheet' type='text/css' />
+<link href='//cdn2.editmysite.com/fonts/Quicksand/font.css?2' rel='stylesheet' type='text/css' />
+<link href='//cdn2.editmysite.com/fonts/Quicksand/font.css?2' rel='stylesheet' type='text/css' />
+<link href='//cdn2.editmysite.com/fonts/Quicksand/font.css?2' rel='stylesheet' type='text/css' />
+<link href='//cdn2.editmysite.com/fonts/Quicksand/font.css?2' rel='stylesheet' type='text/css' />
+<link href='//cdn2.editmysite.com/fonts/Quicksand/font.css?2' rel='stylesheet' type='text/css' />
+<link href='//cdn2.editmysite.com/fonts/Quicksand/font.css?2' rel='stylesheet' type='text/css' />
+<link href='//cdn2.editmysite.com/fonts/Quicksand/font.css?2' rel='stylesheet' type='text/css' />
+<link href='//cdn2.editmysite.com/fonts/Quicksand/font.css?2' rel='stylesheet' type='text/css' />
+<link href='//cdn2.editmysite.com/fonts/Cabin/font.css?2' rel='stylesheet' type='text/css' />
+<style type='text/css'>
+.wsite-elements.wsite-not-footer:not(.wsite-header-elements) div.paragraph, .wsite-elements.wsite-not-footer:not(.wsite-header-elements) p, .wsite-elements.wsite-not-footer:not(.wsite-header-elements) .product-block .product-title, .wsite-elements.wsite-not-footer:not(.wsite-header-elements) .product-description, .wsite-elements.wsite-not-footer:not(.wsite-header-elements) .wsite-form-field label, .wsite-elements.wsite-not-footer:not(.wsite-header-elements) .wsite-form-field label, #wsite-content div.paragraph, #wsite-content p, #wsite-content .product-block .product-title, #wsite-content .product-description, #wsite-content .wsite-form-field label, #wsite-content .wsite-form-field label, .blog-sidebar div.paragraph, .blog-sidebar p, .blog-sidebar .wsite-form-field label, .blog-sidebar .wsite-form-field label {font-family:"Quicksand" !important;}
+#wsite-content div.paragraph, #wsite-content p, #wsite-content .product-block .product-title, #wsite-content .product-description, #wsite-content .wsite-form-field label, #wsite-content .wsite-form-field label, .blog-sidebar div.paragraph, .blog-sidebar p, .blog-sidebar .wsite-form-field label, .blog-sidebar .wsite-form-field label {}
+.wsite-elements.wsite-footer div.paragraph, .wsite-elements.wsite-footer p, .wsite-elements.wsite-footer .product-block .product-title, .wsite-elements.wsite-footer .product-description, .wsite-elements.wsite-footer .wsite-form-field label, .wsite-elements.wsite-footer .wsite-form-field label{font-family:"Quicksand" !important;}
+.wsite-elements.wsite-not-footer:not(.wsite-header-elements) h2, .wsite-elements.wsite-not-footer:not(.wsite-header-elements) .product-long .product-title, .wsite-elements.wsite-not-footer:not(.wsite-header-elements) .product-large .product-title, .wsite-elements.wsite-not-footer:not(.wsite-header-elements) .product-small .product-title, #wsite-content h2, #wsite-content .product-long .product-title, #wsite-content .product-large .product-title, #wsite-content .product-small .product-title, .blog-sidebar h2 {font-family:"Quicksand" !important;font-weight:400 !important;}
+#wsite-content h2, #wsite-content .product-long .product-title, #wsite-content .product-large .product-title, #wsite-content .product-small .product-title, .blog-sidebar h2 {}
+.wsite-elements.wsite-footer h2, .wsite-elements.wsite-footer .product-long .product-title, .wsite-elements.wsite-footer .product-large .product-title, .wsite-elements.wsite-footer .product-small .product-title{font-family:"Quicksand" !important;font-weight:700 !important;color:#a1a1a1 !important;text-transform:  uppercase !important;}
+#wsite-title {font-family:"Quicksand" !important;font-weight:700 !important;}
+.wsite-menu-default a {font-family:"Quicksand" !important;font-weight:700 !important;}
+.wsite-menu a {font-family:"Quicksand" !important;font-weight:700 !important;}
+.wsite-image div, .wsite-caption {}
+.galleryCaptionInnerText {}
+.fancybox-title {}
+.wslide-caption-text {}
+.wsite-phone {}
+.wsite-headline,.wsite-header-section .wsite-content-title {font-family:"Quicksand" !important;font-weight:400 !important;}
+.wsite-headline-paragraph,.wsite-header-section .paragraph {font-family:"Quicksand" !important;font-weight:400 !important;}
+.wsite-button-inner {font-family:"Quicksand" !important;font-weight:700 !important;}
+.wsite-not-footer blockquote {font-family:"Cabin" !important;}
+.wsite-footer blockquote {}
+.blog-header h2 a {}
+#wsite-content h2.wsite-product-title {}
+.wsite-product .wsite-product-price a {}
+.wsite-button-small .wsite-button-inner {font-size:16px !important;}
+.wsite-button-large .wsite-button-inner {font-size:16px !important;}
+@media screen and (min-width: 767px) {.wsite-elements.wsite-not-footer:not(.wsite-header-elements) div.paragraph, .wsite-elements.wsite-not-footer:not(.wsite-header-elements) p, .wsite-elements.wsite-not-footer:not(.wsite-header-elements) .product-block .product-title, .wsite-elements.wsite-not-footer:not(.wsite-header-elements) .product-description, .wsite-elements.wsite-not-footer:not(.wsite-header-elements) .wsite-form-field label, .wsite-elements.wsite-not-footer:not(.wsite-header-elements) .wsite-form-field label, #wsite-content div.paragraph, #wsite-content p, #wsite-content .product-block .product-title, #wsite-content .product-description, #wsite-content .wsite-form-field label, #wsite-content .wsite-form-field label, .blog-sidebar div.paragraph, .blog-sidebar p, .blog-sidebar .wsite-form-field label, .blog-sidebar .wsite-form-field label {font-size:16px !important;}
+#wsite-content div.paragraph, #wsite-content p, #wsite-content .product-block .product-title, #wsite-content .product-description, #wsite-content .wsite-form-field label, #wsite-content .wsite-form-field label, .blog-sidebar div.paragraph, .blog-sidebar p, .blog-sidebar .wsite-form-field label, .blog-sidebar .wsite-form-field label {}
+.wsite-elements.wsite-footer div.paragraph, .wsite-elements.wsite-footer p, .wsite-elements.wsite-footer .product-block .product-title, .wsite-elements.wsite-footer .product-description, .wsite-elements.wsite-footer .wsite-form-field label, .wsite-elements.wsite-footer .wsite-form-field label{font-size:12px !important;}
+.wsite-elements.wsite-not-footer:not(.wsite-header-elements) h2, .wsite-elements.wsite-not-footer:not(.wsite-header-elements) .product-long .product-title, .wsite-elements.wsite-not-footer:not(.wsite-header-elements) .product-large .product-title, .wsite-elements.wsite-not-footer:not(.wsite-header-elements) .product-small .product-title, #wsite-content h2, #wsite-content .product-long .product-title, #wsite-content .product-large .product-title, #wsite-content .product-small .product-title, .blog-sidebar h2 {font-size:40px !important;}
+#wsite-content h2, #wsite-content .product-long .product-title, #wsite-content .product-large .product-title, #wsite-content .product-small .product-title, .blog-sidebar h2 {}
+.wsite-elements.wsite-footer h2, .wsite-elements.wsite-footer .product-long .product-title, .wsite-elements.wsite-footer .product-large .product-title, .wsite-elements.wsite-footer .product-small .product-title{font-size:12px !important;}
+#wsite-title {}
+.wsite-menu-default a {}
+.wsite-menu a {}
+.wsite-image div, .wsite-caption {}
+.galleryCaptionInnerText {}
+.fancybox-title {}
+.wslide-caption-text {}
+.wsite-phone {}
+.wsite-headline,.wsite-header-section .wsite-content-title {}
+.wsite-headline-paragraph,.wsite-header-section .paragraph {}
+.wsite-button-inner {}
+.wsite-not-footer blockquote {font-size:18px !important;line-height:50px !important;}
+.wsite-footer blockquote {}
+.blog-header h2 a {}
+#wsite-content h2.wsite-product-title {}
+.wsite-product .wsite-product-price a {}
+}</style>
+
+		<script src='/files/templateArtifacts.js?1695410986'></script>
+<script>
+var STATIC_BASE = '//cdn1.editmysite.com/';
+var ASSETS_BASE = '//cdn2.editmysite.com/';
+var STYLE_PREFIX = 'wsite';
+</script>
+<script src='https://cdn2.editmysite.com/js/jquery-1.8.3.min.js'></script>
+
+<script type="text/javascript" src="//cdn2.editmysite.com/js/lang/en/stl.js?buildTime=1695407040&"></script>
+<script src="//cdn2.editmysite.com/js/site/main.js?buildTime=1695407040"></script><script type="text/javascript">
+		function initCustomerAccountsModels() {
+					(function(){_W.setup_rpc({"url":"\/ajax\/api\/JsonRPC\/CustomerAccounts\/","actions":{"CustomerAccounts":[{"name":"login","len":2,"multiple":false,"standalone":false},{"name":"logout","len":0,"multiple":false,"standalone":false},{"name":"getSessionDetails","len":0,"multiple":false,"standalone":false},{"name":"getAccountDetails","len":0,"multiple":false,"standalone":false},{"name":"getOrders","len":0,"multiple":false,"standalone":false},{"name":"register","len":4,"multiple":false,"standalone":false},{"name":"emailExists","len":1,"multiple":false,"standalone":false},{"name":"passwordReset","len":1,"multiple":false,"standalone":false},{"name":"passwordUpdate","len":3,"multiple":false,"standalone":false},{"name":"validateSession","len":1,"multiple":false,"standalone":false}]},"namespace":"_W.CustomerAccounts.RPC"});
+_W.setup_model_rpc({"rpc_namespace":"_W.CustomerAccounts.RPC","model_namespace":"_W.CustomerAccounts.BackboneModelData","collection_namespace":"_W.CustomerAccounts.BackboneCollectionData","bootstrap_namespace":"_W.CustomerAccounts.BackboneBootstrap","models":{"CustomerAccounts":{"_class":"CustomerAccounts.Model.CustomerAccounts","defaults":null,"validation":null,"types":null,"idAttribute":null,"keydefs":null}},"collections":{"CustomerAccounts":{"_class":"CustomerAccounts.Collection.CustomerAccounts"}},"bootstrap":[]});
+})();
+		}
+		if(document.createEvent && document.addEventListener) {
+			var initEvt = document.createEvent('Event');
+			initEvt.initEvent('customerAccountsModelsInitialized', true, false);
+			document.dispatchEvent(initEvt);
+		} else if(document.documentElement.initCustomerAccountsModels === 0){
+			document.documentElement.initCustomerAccountsModels++
+		}
+		</script>
+		<script type="text/javascript"> _W = _W || {}; _W.securePrefix='crypto.interactive-maths.com'; </script><script>_W = _W || {};
+			_W.customerLocale = "en_US";
+			_W.storeName = null;
+			_W.isCheckoutReskin = false;
+			_W.storeCountry = "PE";
+			_W.storeCurrency = "GBP";
+			_W.storeEuPrivacyPolicyUrl = "";
+			com_currentSite = "591060356522663677";
+			com_userID = "11345755";</script><script type="text/javascript">_W.configDomain = "www.weebly.com";</script><script>_W.relinquish && _W.relinquish()</script>
+<script type="text/javascript" src="//cdn2.editmysite.com/js/lang/en/stl.js?buildTime=1695407040&"></script><script> _W.themePlugins = [];</script><script type="text/javascript"> _W.recaptchaUrl = "https://www.google.com/recaptcha/api.js"; </script><script type="text/javascript"><!--
+	
+	
+	function initFlyouts(){
+		initPublishedFlyoutMenus(
+			[{"id":"610206558414627000","title":"Home","url":"index.html","target":"","nav_menu":false,"nonclickable":false},{"id":"307273006836702862","title":"Introduction to Cryptography","url":"introduction-to-cryptography.html","target":"","nav_menu":false,"nonclickable":false},{"id":"645437683170360706","title":"Monoalphabetic Substitution Ciphers","url":"monoalphabetic-substitution-ciphers.html","target":"","nav_menu":false,"nonclickable":false},{"id":"127821211805027989","title":"Simple Transposition Ciphers","url":"simple-transposition-ciphers.html","target":"","nav_menu":false,"nonclickable":false},{"id":"420122556836533021","title":"Polyalphabetic Substitution Ciphers","url":"polyalphabetic-substitution-ciphers.html","target":"","nav_menu":false,"nonclickable":false},{"id":"435603953337742292","title":"Fractionating Ciphers","url":"fractionating-ciphers.html","target":"","nav_menu":false,"nonclickable":false},{"id":"797448386188867521","title":"Digraph Substitution Ciphers","url":"digraph-substitution-ciphers.html","target":"","nav_menu":false,"nonclickable":false}],
+			"610606302467344150",
+			'',
+			'active',
+			false,
+			{"navigation\/item":"<li {{#id}}id=\"{{id}}\"{{\/id}} class=\"wsite-menu-item-wrap\">\n\t<a\n\t\t{{^nonclickable}}\n\t\t\t{{^nav_menu}}\n\t\t\t\thref=\"{{url}}\"\n\t\t\t{{\/nav_menu}}\n\t\t{{\/nonclickable}}\n\t\t{{#target}}\n\t\t\ttarget=\"{{target}}\"\n\t\t{{\/target}}\n\t\t{{#membership_required}}\n\t\t\tdata-membership-required=\"{{.}}\"\n\t\t{{\/membership_required}}\n\t\tclass=\"wsite-menu-item\"\n\t\t>\n\t\t{{{title_html}}}\n\t<\/a>\n\t{{#has_children}}{{> navigation\/flyout\/list}}{{\/has_children}}\n<\/li>\n","navigation\/flyout\/list":"<div class=\"wsite-menu-wrap\" style=\"display:none\">\n\t<ul class=\"wsite-menu\">\n\t\t{{#children}}{{> navigation\/flyout\/item}}{{\/children}}\n\t<\/ul>\n<\/div>\n","navigation\/flyout\/item":"<li {{#id}}id=\"{{id}}\"{{\/id}}\n\tclass=\"wsite-menu-subitem-wrap {{#is_current}}wsite-nav-current{{\/is_current}}\"\n\t>\n\t<a\n\t\t{{^nonclickable}}\n\t\t\t{{^nav_menu}}\n\t\t\t\thref=\"{{url}}\"\n\t\t\t{{\/nav_menu}}\n\t\t{{\/nonclickable}}\n\t\t{{#target}}\n\t\t\ttarget=\"{{target}}\"\n\t\t{{\/target}}\n\t\tclass=\"wsite-menu-subitem\"\n\t\t>\n\t\t<span class=\"wsite-menu-title\">\n\t\t\t{{{title_html}}}\n\t\t<\/span>{{#has_children}}<span class=\"wsite-menu-arrow\">&gt;<\/span>{{\/has_children}}\n\t<\/a>\n\t{{#has_children}}{{> navigation\/flyout\/list}}{{\/has_children}}\n<\/li>\n"},
+			{}
+		)
+	}
+//-->
+</script>
+		<style>
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.button1 {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #4CAF50;
+}
+
+.button1:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.button2 {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #008CBA;
+}
+
+.button2:hover {
+    background-color: #008CBA;
+    color: white;
+}
+
+.button3 {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #f44336;
+}
+
+.button3:hover {
+    background-color: #f44336;
+    color: white;
+}
+</style>
+		
+	</head>
+	<body class="no-header-page  wsite-page-rail-fence-cipher  full-width-body-off header-overlay-on alt-nav-off  wsite-theme-dark"><div class="wrapper">
+    <div class="birdseye-header">
+      <div class="nav-wrap">
+        <div class="container">
+          <div class="logo"><span class="wsite-logo">
+
+	<a href="/">
+	
+	<span id="wsite-title">Crypto Corner</span>
+	
+	</a>
+
+</span></div>
+          <div class="nav desktop-nav"><ul class="wsite-menu-default">
+		<li id="pg610206558414627000" class="wsite-menu-item-wrap">
+			<a
+						href="/"
+				class="wsite-menu-item"
+				>
+				Home
+			</a>
+			<div class="wsite-menu-wrap" style="display:none">
+	<ul class="wsite-menu">
+		<li id="wsite-nav-774133273423841981"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/challenge.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Crypto Corner Challenges
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-744560601490918658"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/glossary.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Glossary
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-862016763229752300"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/help-with-activities.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Help with Activities
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-159980943888053810"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/educational-uses.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Educational Uses
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-957083175202498317"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/downloadable-resources.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Downloadable Resources
+		</span>
+	</a>
+	
+</li>
+
+	</ul>
+</div>
+
+		</li>
+		<li id="pg307273006836702862" class="wsite-menu-item-wrap">
+			<a
+						href="/introduction-to-cryptography.html"
+				class="wsite-menu-item"
+				>
+				Introduction to Cryptography
+			</a>
+			<div class="wsite-menu-wrap" style="display:none">
+	<ul class="wsite-menu">
+		<li id="wsite-nav-827217038965638522"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/steganography.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Steganography
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-413770729179351323"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/codes-and-ciphers.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Codes and Ciphers
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-299714350867997185"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/conventions-in-cryptography.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Conventions in Cryptography
+		</span>
+	</a>
+	
+</li>
+
+	</ul>
+</div>
+
+		</li>
+		<li id="pg645437683170360706" class="wsite-menu-item-wrap">
+			<a
+						href="/monoalphabetic-substitution-ciphers.html"
+				class="wsite-menu-item"
+				>
+				Monoalphabetic Substitution Ciphers
+			</a>
+			<div class="wsite-menu-wrap" style="display:none">
+	<ul class="wsite-menu">
+		<li id="wsite-nav-337841674829597170"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/atbash-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Atbash Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-219541603477703399"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/pigpen-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Pigpen Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-367749416539778036"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/caesar-shift-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Caesar Shift Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-950214305874531815"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/affine-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Affine Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-300113580848924474"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/mixed-alphabet-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Mixed Alphabet Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-363966700817716263"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/other-examples1.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Other Examples
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-761808592629466466"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/frequency-analysis-breaking-the-code.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Frequency Analysis: Breaking the Code
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-335476249266277973"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/homophonic-substitution.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Homophonic Substitution
+		</span>
+	</a>
+	
+</li>
+
+	</ul>
+</div>
+
+		</li>
+		<li id="pg127821211805027989" class="wsite-menu-item-wrap">
+			<a
+						href="/simple-transposition-ciphers.html"
+				class="wsite-menu-item"
+				>
+				Simple Transposition Ciphers
+			</a>
+			<div class="wsite-menu-wrap" style="display:none">
+	<ul class="wsite-menu">
+		<li id="wsite-nav-610606302467344150"
+	class="wsite-menu-subitem-wrap wsite-nav-current"
+	>
+	<a
+				href="/rail-fence-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Rail Fence Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-451089397530960032"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/route-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Route Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-634460164318781589"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/columnar-transposition-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Columnar Transposition Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-457838684978832036"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/myszkowski-transposition-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Myszkowski Transposition Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-465971294279896042"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/permutation-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Permutation Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-569121963985755645"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/anagramming-jumbling-words.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Anagramming: Jumbling words
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-396640943364451814"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/combining-monoalphabetic-and-simple-transposition-ciphers.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Combining Monoalphabetic and Simple Transposition Ciphers
+		</span>
+	</a>
+	
+</li>
+
+	</ul>
+</div>
+
+		</li>
+		<li id="pg420122556836533021" class="wsite-menu-item-wrap">
+			<a
+						href="/polyalphabetic-substitution-ciphers.html"
+				class="wsite-menu-item"
+				>
+				Polyalphabetic Substitution Ciphers
+			</a>
+			<div class="wsite-menu-wrap" style="display:none">
+	<ul class="wsite-menu">
+		<li id="wsite-nav-769353447380890913"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/vigenegravere-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Vigen&egrave;re Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-625250352999640259"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/kasiski-analysis-breaking-the-code.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Kasiski Analysis: Breaking the Code
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-155698535368560576"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/autokey-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Autokey Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-413035697300632928"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/other-examples.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Other Examples
+		</span>
+	</a>
+	
+</li>
+
+	</ul>
+</div>
+
+		</li>
+		<li id="pg435603953337742292" class="wsite-menu-item-wrap">
+			<a
+						href="/fractionating-ciphers.html"
+				class="wsite-menu-item"
+				>
+				Fractionating Ciphers
+			</a>
+			<div class="wsite-menu-wrap" style="display:none">
+	<ul class="wsite-menu">
+		<li id="wsite-nav-868921718925519230"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/polybius-square.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Polybius Square
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-193872488185057447"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/straddling-checkerboard.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Straddling Checkerboard
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-593103961400116161"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/transposing-fractionated-text.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Transposing Fractionated Text
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-242820033469168494"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/other-ways-to-alter-fractionated-text.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Other ways to Alter Fractionated Text
+		</span>
+	</a>
+	
+</li>
+
+	</ul>
+</div>
+
+		</li>
+		<li id="pg797448386188867521" class="wsite-menu-item-wrap">
+			<a
+						href="/digraph-substitution-ciphers.html"
+				class="wsite-menu-item"
+				>
+				Digraph Substitution Ciphers
+			</a>
+			<div class="wsite-menu-wrap" style="display:none">
+	<ul class="wsite-menu">
+		<li id="wsite-nav-537436535542979587"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/playfair-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Playfair Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-916011651136230655"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/two-square-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Two-Square Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-860473149554495085"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/four-square-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Four-Square Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-385031735791548811"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/hill-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Hill Cipher
+		</span>
+	</a>
+	
+</li>
+
+	</ul>
+</div>
+
+		</li>
+</ul>
+</div>
+          <label class="hamburger"><span></span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-wrap">
+      <div id="wsite-content" class="wsite-elements wsite-not-footer">
+	<div class="wsite-section-wrap">
+	<div class="wsite-section wsite-body-section wsite-background-18"  >
+		<div class="wsite-section-content">
+          <div class="container">
+			<div class="wsite-section-elements">
+				<h2 class="wsite-content-title" style="text-align:left;">Rail Fence Cipher<br /></h2>
+
+<div><div id="123224617758581401" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml"><p><font size = +2><font color = white><b>
+<ol>
+<li><a href="#act">Cipher Activity</a>
+<li><a href="#intro">Introduction</a>
+<li><a href="#encrypt">Encryption</a>
+<li><a href="#decrypt">Decryption</a>
+<li><a href="#disc">Discussion</a>
+<li><a href="#ex">Exercise</a>
+</ol></b></font></font></p></div>
+
+
+
+</div>
+
+<div class="wsite-adsense"> 
+
+            <script type="text/javascript" src="//www.weebly.com/weebly/apps/serveAds.php?type=adsense&elementid=877136855709564490&ineditor=0&subdomain=crypto.interactive-maths.com&pubid=pub-6012495557192475&adformat=728x90&adtype=text_image&bordercolor=CCCCCC&bgcolor=CCCCCC&linkcolor=000000&textcolor=333333&urlcolor=666666"></script></div>
+
+<div><div id="712601795229968850" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml"><a id="act"></a></div>
+
+
+
+</div>
+
+<div><div id="745009438417034956" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml"><script language="JavaScript">
+
+encryptcount = 0;
+decryptcount = 0;
+
+function chooseAlphabet()
+{
+    var alpha = document.getElementById("alpha-choice");
+	var alphaChoice = alpha.options[alpha.selectedIndex].value;
+	document.getElementById("alphabet").value = alphaChoice;
+	document.getElementById("wrapper").innerHTML = "";
+}
+
+function keyChange()
+{
+    document.getElementById("wrapper").innerHTML = "";
+    document.getElementById("wrapper1").innerHTML = "";
+}
+
+function blocksBtn()
+{
+    if (document.getElementById("blocks").checked == true)
+    {
+        document.getElementById("removeSpaces").checked = true;
+        document.getElementById("removeSpaces").disabled = true;
+    }
+    else if (document.getElementById("blocks").checked == false)
+    {
+        document.getElementById("removeSpaces").disabled = false;
+    }
+}
+
+function nullsBtn()
+{
+    if (document.getElementById("nulls").checked == true)
+    {
+        document.getElementById("nulls_letter").disabled = false;
+    }
+    else if (document.getElementById("nulls").checked == false)
+    {
+        document.getElementById("nulls_letter").disabled = true;
+    }
+}
+
+function reverseWordsFn()
+{
+    if (document.getElementById("reverseWords").checked == true)
+    {
+        document.getElementById("removeSpaces").checked = false;
+        document.getElementById("removeSpaces").disabled = true;
+        document.getElementById("blocks").checked = false;
+        document.getElementById("blocks").disabled = true;
+    }
+    else if (document.getElementById("reverseWords").checked == false)
+    {
+        document.getElementById("removeSpaces").disabled = false;
+        document.getElementById("blocks").disabled = false;
+    }
+}
+
+function resetEncryptCount()
+{
+	encryptcount = 0;
+	document.getElementById("ciphertext").value = "";
+}
+function resetDecryptCount()
+{
+	decryptcount = 0;
+	document.getElementById("plaintext").value = "";
+}
+
+function belongsTo(character, checkstring)
+{
+	p = 0;
+	for (k=0;k<checkstring.length;k++)
+	{
+		if (character == checkstring.substr(k,character.length))
+		{
+			p = p + 1;
+		}
+	}
+	if (p > 0)
+	{
+		return "true";
+	}
+	else
+	{
+		return "false";
+	}
+}
+	
+function randomNumber(min, max)
+{
+	return Math.floor(Math.random() * (1 + max - min) + min);
+}
+
+function railfenceEncrypt2(string)
+{
+	ptext = string.toUpperCase();
+	key = parseInt(document.getElementById("key").value);
+	
+	if (document.getElementById("nulls").checked == true)
+	{
+		q = 0;
+		d = 1;
+
+		while (q < 1)
+		{
+			if (ptext.length <= d * key - (d - 1))
+			{
+				while (ptext.length < d * key - (d - 1))
+				{
+					ptext = ptext + document.getElementById("nulls_letter").value.toUpperCase();
+				}
+				q = 2;
+			}
+			else
+			{
+				d = d + 2;
+			}
+		}
+	}
+	
+	mainArray = Array(key);
+	for(i=0; i<key; i++)
+	{
+		mainArray[i] = Array(ptext.length);
+		for (s=0; s<ptext.length; s++)
+		{
+			mainArray[i][s] = "";
+		}
+	}
+	
+	j = 0;
+	r = 0;
+	for (i=0; i<ptext.length; i++)
+	{
+		p = ptext.substr(i,1);
+		mainArray[j][i] = p;
+		if (r == 0)
+		{
+			j = j + 1;
+		}
+		else if (r == 1)
+		{
+			j = j - 1;
+		}
+		
+		if (j == key - 1)
+		{
+			r = 1;
+		}
+		else if (j == 0)
+		{
+			r = 0;
+		}
+	}
+	
+	for (i=0; i<mainArray.length; i++)
+	{
+		mainArray[i] = mainArray[i].join("");
+	}
+	
+	ctext = mainArray.join("");
+	return ctext;
+}
+
+function railfenceDecrypt2(string)
+{
+	ctext = string.toUpperCase();
+	key = parseInt(document.getElementById("key").value);
+	
+	mainArray = Array(key);
+	for(i=0; i<key; i++)
+	{
+		mainArray[i] = Array(ctext.length);
+		for (s=0; s<ctext.length; s++)
+		{
+			mainArray[i][s] = "";
+		}
+	}
+	
+	
+	q = 0;
+	for (t=0; t<mainArray.length; t++)
+	{
+		j = 0;
+		r = 0;
+		for (i=0; i<ctext.length; i++)
+		{
+			if (j == t)
+			{
+				c = ctext.substr(q,1);
+				mainArray[j][i] = c;
+				q = q + 1;
+			}
+			if (r == 0)
+			{
+				j = j + 1;
+			}
+			else if (r == 1)
+			{
+				j = j - 1;
+			}
+			
+			if (j == key - 1)
+			{
+				r = 1;
+			}
+			else if (j == 0)
+			{
+				r = 0;
+			}
+		}
+	}
+	
+	
+	j = 0;
+	r = 0;
+	ptext = "";
+	for (i=0; i<ctext.length; i++)
+	{
+		ptext = ptext + mainArray[j][i];
+		
+		if (r == 0)
+		{
+			j = j + 1;
+		}
+		else if (r == 1)
+		{
+			j = j - 1;
+		}
+		
+		if (j == key - 1)
+		{
+			r = 1;
+		}
+		else if (j == 0)
+		{
+			r = 0;
+		}
+	}
+	
+	ptext = ptext.toLowerCase();
+	return ptext;
+}
+
+function generateGrid(string, num)
+{
+	ptext = string.toUpperCase();
+	
+	if (document.getElementById("nulls").checked == true)
+	{
+		q = 0;
+		d = 1;
+
+		while (q < 1)
+		{
+			if (ptext.length <= d * num - (d - 1))
+			{
+				while (ptext.length < d * num - (d - 1))
+				{
+					ptext = ptext + document.getElementById("nulls_letter").value.toUpperCase();
+				}
+				q = 2;
+			}
+			else
+			{
+				d = d + 2;
+			}
+		}
+	}
+	
+	m = ptext.length;
+	if (ptext.length > 40)
+	{
+		document.getElementById("wrapper1").innerHTML = "The first 40 letters of the plaintext are shown";
+		m = 40;
+	}
+	
+	mainArray = Array(num);
+	for(i=0; i<num; i++)
+	{
+		mainArray[i] = Array(ptext.length);
+		for (s=0; s<ptext.length; s++)
+		{
+			mainArray[i][s] = "-";
+		}
+	}
+	
+	j = 0;
+	r = 0;
+	for (i=0; i<ptext.length; i++)
+	{
+		p = ptext.substr(i,1);
+		mainArray[j][i] = p;
+		if (r == 0)
+		{
+			j = j + 1;
+		}
+		else if (r == 1)
+		{
+			j = j - 1;
+		}
+		
+		if (j == num - 1)
+		{
+			r = 1;
+		}
+		else if (j == 0)
+		{
+			r = 0;
+		}
+	}
+	
+
+	cipherAlphabet = "<table style=\"color:black;background-color:lightgray\" border=\"1\">";
+	for (j = 0; j < num; j++)
+	{
+		cipherAlphabet += "<tr>";
+		for (i=0; i<m; i++) 
+		{
+	    	cipherAlphabet += "<td width=\"20px\" style=\"text-align:center\">";
+    	cipherAlphabet += mainArray[j][i];
+    	cipherAlphabet += "</td>";
+		}
+		cipherAlphabet += "</tr>";
+	}
+	cipherAlphabet += "</table>";
+	
+	document.getElementById("wrapper").innerHTML = cipherAlphabet;
+}
+	
+function remove(stringUsed, alphabetUsed)
+{
+	m = 0;
+	newstring = stringUsed;
+	while (m<newstring.length)
+	{
+		if (belongsTo(newstring.substr(m,1),alphabetUsed) == "false")
+		{
+			newstring = newstring.substring(0,m) + newstring.substring(m+1,newstring.length);
+		}
+		else
+		{
+			m++;
+		}
+	}
+	return newstring;
+}
+
+function blocks(string)
+{
+	newstring = string;
+	strlength = newstring.length;	
+	d = 5;
+	while (d < strlength)
+	{
+		newstring = newstring.substring(0,d) + " " + newstring.substring(d,strlength);
+		strlength = newstring.length;
+		d = d + 6;
+	}
+	return newstring;
+}
+
+
+
+function encrypt()
+{
+    if (document.getElementById("alphabet").value == "")
+	{
+		alert("Choose an alphabet, or type your own.");
+	}
+	else
+	{
+		alphabet1 = document.getElementById("alphabet").value.toUpperCase();
+		alphabet2 = " " + alphabet1;
+		plain = document.getElementById("plaintext").value.toUpperCase();
+		
+		
+		if (document.getElementById("removeChar").checked == true)
+	    {
+		    plain = remove(plain,alphabet2);
+	    }
+	
+	
+	    if (document.getElementById("removeSpaces").checked == true)
+	    {
+    		plain = remove(plain,alphabet1);
+    	}
+	    
+	    cipher = railfenceEncrypt2(plain);
+	
+	
+	    if (document.getElementById("blocks").checked == true)
+	    {
+    		cipher = remove(cipher,alphabet1);
+		    cipher = blocks(cipher);
+	    }
+		
+		
+		if (document.getElementById("slow-encrypt").checked == false)
+		{
+			document.getElementById("ciphertext").value = cipher;
+		}
+		if (document.getElementById("slow-encrypt").checked == true)
+		{
+			if(encryptcount >= plain.length)
+			{
+				alert("You have finished the message. Press Reset or deselect Slow Encrypt");
+			}
+			else
+			{
+				document.getElementById("ciphertext").value = document.getElementById("ciphertext").value + cipher.substr(encryptcount,1);
+				encryptcount = encryptcount + 1;
+			}
+		}
+		
+	}
+}
+
+function decrypt()
+{
+    if (document.getElementById("alphabet").value == "")
+	{
+		alert("Choose an alphabet, or type your own.");
+	}
+	else
+	{
+		alphabet1 = document.getElementById("alphabet").value.toLowerCase();
+		alphabet2 = " " + alphabet1;
+		cipher = document.getElementById("ciphertext").value.toLowerCase();
+		
+		
+		if (document.getElementById("removeChar").checked == true)
+	    {
+		    cipher = remove(cipher,alphabet2);
+	    }
+	
+	
+	    if (document.getElementById("removeSpaces").checked == true)
+	    {
+    		cipher = remove(cipher,alphabet1);
+    	}
+    	
+    	plain = railfenceDecrypt2(cipher);
+    	
+    	if (document.getElementById("blocks").checked == true)
+	    {
+    		plain = remove(plain,alphabet1);
+		    plain = blocks(plain);
+	    }
+		
+		
+		if (document.getElementById("slow-decrypt").checked == false)
+		{
+			document.getElementById("plaintext").value = plain;
+		}
+		if (document.getElementById("slow-decrypt").checked == true)
+		{
+			if(decryptcount >= cipher.length)
+			{
+				alert("You have finished the message. Press Reset or deselect Slow Decrypt");
+			}
+			else
+			{
+				document.getElementById("plaintext").value = document.getElementById("plaintext").value + plain.substr(decryptcount,1);
+				decryptcount = decryptcount + 1;
+			}
+		}
+		
+	}
+}
+
+function showCiphertextAlphabet()
+{
+    if (document.getElementById("alphabet").value == "")
+	{
+		alert("Choose an alphabet, or type your own.");
+	}
+	else if (document.getElementById("plaintext").value == "")
+	{
+		alert("Type a message to encrypt.");
+	}
+	else
+	{
+		plain = document.getElementById("plaintext").value.toUpperCase();
+		alphabet1 = document.getElementById("alphabet").value.toUpperCase();
+		alphabet2 = " " + alphabet1;
+		key = parseInt(document.getElementById("key").value);
+		document.getElementById("wrapper1").innerHTML = "";
+		
+		if (document.getElementById("removeChar").checked == true)
+		{
+			plain = remove(plain,alphabet2);
+		}
+		
+		
+		if (document.getElementById("removeSpaces").checked == true)
+		{
+			plain = remove(plain,alphabet1);
+		}
+			
+		generateGrid(plain,key);
+	}
+}
+
+function resetFunction()
+{
+    document.getElementById("alphabet").value = "abcdefghijklmnopqrstuvwxyz";
+    document.getElementById("alpha-choice").selectedIndex = "0";
+    document.getElementById("key").value = "3";
+    document.getElementById("plaintext").value = "";
+    document.getElementById("slow-encrypt").checked = false;
+    document.getElementById("ciphertext").value = "";
+    document.getElementById("slow-decrypt").checked = false;
+    document.getElementById("removeSpaces").checked = false;
+    document.getElementById("blocks").checked = false;
+    document.getElementById("removeSpaces").disabled = false;
+    document.getElementById("blocks").disabled = false;
+    document.getElementById("nulls").checked = false;
+    document.getElementById("nulls_letter").disabled = true;
+    document.getElementById("nulls_letter").value = "X";
+    encryptcount = 0;
+    decryptcount = 0;
+    document.getElementById("wrapper").innerHTML = "";
+    document.getElementById("wrapper1").innerHTML = "";
+}
+
+</script>
+
+<div style="background-color:lightgray;max-width:800px">
+<a href="http://crypto.interactive-maths.com/"><image src="http://crypto.interactive-maths.com/uploads/1/1/3/4/11345755/cc-logo_orig.jpg" width = "200px" align="right"></a>
+
+<div>
+    <form>
+      <fieldset data-role="controlgroup" style="min-width:200px">
+        <legend style="color:black">Alphabet and Key:</legend>
+            <select name = "alpha-choice" id = "alpha-choice" onchange="chooseAlphabet()">
+                <option selected id = "alpha-standard" value = "abcdefghijklmnopqrstuvwxyz">Standard</option>
+                <option id = "alpha-punctuation" value = " .,?!abcdefghijklmnopqrstuvwxyz">Include Basic Punctuation</option>
+                <option id = "alpha-numbers" value = "abcdefghijklmnopqrstuvwxyz0123456789">Include Numbers</option>
+                <option id = "alpha-all" value = " .,?!abcdefghijklmnopqrstuvwxyz0123456789">Include Basic Punctuation and Numbers</option>
+                <option id = "alpha-own" value = "">Use you own alphabet</option>
+            </select>
+            <br>
+            <input id="alphabet" value="abcdefghijklmnopqrstuvwxyz" style="width:350px;max-width:100%"></input><br><br>
+            <div style="display:inline-block">
+            <label>Rail Key:</label>
+            <input id="key" type="number" value="3" min="2" max="30" onchange="keyChange()" style="width:50px;max-width:100%"></input>
+            </div>
+      </fieldset>
+      <fieldset data-role="controlgroup">
+        <legend style="color:black">Plaintext:</legend>
+        <div style="display:inline-block;width:70%;min-width:200px">
+            <textarea id="plaintext" style="width:100%" rows="5"></textarea>
+        </div>
+        <div style="display:inline-block;vertical-align:top">
+            <input type="button" id="encryptBtn" value="Encrypt" onclick="encrypt()" class="button button1"><br>
+            <label style="color:black"><input type="checkbox" id = "slow-encrypt" onchange="resetEncryptCount()">Slow Encrypt</label>
+        </div>
+      </fieldset>
+      <fieldset data-role="controlgroup">
+        <legend style="color:black">Ciphertext:</legend>
+        <div style="display:inline-block;width:70%;min-width:200px">
+            <textarea id="ciphertext" style="width:100%" rows="5"></textarea>
+        </div>
+        <div style="display:inline-block;vertical-align:top">
+            <input type="button" id="decryptBtn" value="Decrypt" onclick="decrypt()" class="button button3"><br>
+            <label style="color:black"><input type="checkbox" id = "slow-decrypt" onchange="resetDecryptCount()">Slow Decrypt</label>
+        </div>
+      </fieldset>
+      <fieldset data-role="controlgroup">
+        <legend style="color:black">Options:</legend>
+        <div style="display:inline-block">
+            <input type="button" id="showCipherAlpha" value="Show Grid" onclick="showCiphertextAlphabet()" class="button button2">
+        </div>
+        <div style="display:inline-block">
+            <input type="button" id="resetBtn" value="Reset" onclick="resetFunction()" class="button button2">
+        </div>
+        <div style="display:inline-block;vertical-align:top">
+            <label style="color:black"><input type="checkbox" id = "removeChar" checked disabled>Remove all Characters not in alphabet (except spaces)</label><br>
+            <label style="color:black"><input type="checkbox" id = "removeSpaces">Remove Spaces</label><br>
+            <label style="color:black"><input type="checkbox" id = "blocks" onclick="blocksBtn()">Put ciphertext in blocks of 5</label><br>
+            <label style="color:black"><input type="checkbox" id = "nulls" onclick="nullsBtn()">Include Nulls and use this: </label><input style="width:30" id="nulls_letter" value="X" disabled>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+  
+  <div id="wrapper1" style="color:red"></div>
+  
+  <div id="wrapper"></div>
+  
+  
+  <div align = "center" style = "color:purple;font-size:25px"><label>Crypto Corner © Daniel Rodriguez-Clark 2017</label></div>
+</div></div>
+
+
+
+</div>
+
+<div class="wsite-adsense"> 
+
+            <script type="text/javascript" src="//www.weebly.com/weebly/apps/serveAds.php?type=adsense&elementid=829268994867427575&ineditor=0&subdomain=crypto.interactive-maths.com&pubid=pub-6012495557192475&adformat=728x90&adtype=text_image&bordercolor=CCCCCC&bgcolor=CCCCCC&linkcolor=000000&textcolor=333333&urlcolor=666666"></script></div>
+
+<div><div id="385414041353107217" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml"><a id="intro"></a></div>
+
+
+
+</div>
+
+<div class="paragraph" style="text-align:justify;">The railfence cipher is an easy to apply transposition cipher that jumbles up the order of the letters of a message in a quick convenient way. It also has the security of a key to make it a little bit harder to break.<br /></div>
+
+<div class="paragraph" style="text-align:justify;">The Rail Fence cipher works by writing your message on alternate lines across the page, and then reading off each line in turn. For example, the plaintext "defend the east wall" is written as shown below, with all spaces removed.<br /></div>
+
+<div><div class="wsite-image wsite-image-border-none " style="padding-top:10px;padding-bottom:10px;margin-left:0;margin-right:0;text-align:center">
+<a href='/uploads/1/1/3/4/11345755/3139303_orig.jpg' rel='lightbox' onclick='if (!lightboxLoaded) return false'>
+<img src="/uploads/1/1/3/4/11345755/3139303.jpg?410" alt="Picture" style="width:auto;max-width:100%" />
+</a>
+<div style="display:block;font-size:90%">The simplest Rail Fence Cipher, where each letter is written in a zigzag pattern across the page.</div>
+</div></div>
+
+<div class="paragraph" style="text-align:justify;">The ciphertext is then read off by writing the top row first, followed by the bottom row, to get "DFNTEATALEEDHESWL".<span></span><br /></div>
+
+<div><div id="909369536959793387" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml"><a id="encrypt"></a></div>
+
+
+
+</div>
+
+<div class="paragraph" style="text-align:justify;"><font size="4"><u><strong>Encryption</strong></u></font><br /><span></span>To encrypt a message using the Rail Fence Cipher, you have to write your message in zigzag lines across the page, and then read off each row. Firstly, you need to have a key, which for this cipher is the number of rows you are going to have. You then start writing the letters of the plaintext diagonally down to the right until you reach the number of rows specified by the key. You then bounce back up diagonally until you hit the first row again. This continues until the end of the plaintext.<br /></div>
+
+<div class="paragraph" style="text-align:justify;">For the plaintext we used above, "defend the east wall", with a key of 3, we get the encryption process shown below.<br /></div>
+
+<div><div class="wsite-image wsite-image-border-none " style="padding-top:10px;padding-bottom:10px;margin-left:0;margin-right:0;text-align:center">
+<a href='/uploads/1/1/3/4/11345755/3703653_orig.jpg' rel='lightbox' onclick='if (!lightboxLoaded) return false'>
+<img src="/uploads/1/1/3/4/11345755/3703653.jpg?468" alt="Picture" style="width:auto;max-width:100%" />
+</a>
+<div style="display:block;font-size:90%">The Rail Fence Cipher with a key of 3. Notice the nulls added at the end of the message to make it the right length.</div>
+</div></div>
+
+<div class="paragraph" style="text-align:justify;">Note that at the end of the message we have inserted two "X"s. These are called nulls, and act as placeholders. We do this to make the message fit neatly in to the grid (so that there are the same number of letters on the top row, as on the bottom row. Although not necessary, it makes the decryption process a lot easier if the message has this layout.<br /></div>
+
+<div class="paragraph" style="text-align:justify;">The ciphertext is read off row by row to get "DNETLEEDHESWLXFTAAX".<br /></div>
+
+<div class="wsite-adsense"> 
+
+            <script type="text/javascript" src="//www.weebly.com/weebly/apps/serveAds.php?type=adsense&elementid=980028863507494973&ineditor=0&subdomain=crypto.interactive-maths.com&pubid=pub-6012495557192475&adformat=728x90&adtype=text_image&bordercolor=CCCCCC&bgcolor=CCCCCC&linkcolor=000000&textcolor=333333&urlcolor=666666"></script></div>
+
+<div><div id="162529911186897690" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml"><a id="decrypt"></a></div>
+
+
+
+</div>
+
+<div class="paragraph" style="text-align:justify;"><font size="4"><u><strong>Decryption</strong></u></font><br /><span></span>The decryption process for the Rail Fence Cipher involves reconstructing the diagonal grid used to encrypt the message. We start writing the message, but leaving a dash in place of the spaces yet to be occupied. Gradually, you can replace all the dashes with the corresponding letters, and read off the plaintext from the table.<br /><span></span></div>
+
+<div class="paragraph" style="text-align:justify;">We start by making a grid with as many rows as the key is, and as many columns as the length of the ciphertext. We then place the first letter in the top left square, and dashes diagonally downwards where the letters will be. When we get back to the top row, we place the next letter in the ciphertext. Continue like this across the row, and start the next row when you reach the end.<br /></div>
+
+<div class="paragraph" style="text-align:justify;">For example, if you receive the ciphertext "TEKOOHRACIRMNREATANFTETYTGHH", encrypted with a key of 4, you start by placing the "T" in the first square. You then dash the diagonal down spaces until you get back to the top row, and place the "E" here. Continuing to fill the top row you get the pattern below.<br /></div>
+
+<div><div class="wsite-image wsite-image-border-none " style="padding-top:10px;padding-bottom:10px;margin-left:0;margin-right:0;text-align:center">
+<a href='/uploads/1/1/3/4/11345755/3501167_orig.jpg' rel='lightbox' onclick='if (!lightboxLoaded) return false'>
+<img src="/uploads/1/1/3/4/11345755/3501167.jpg?617" alt="Picture" style="width:auto;max-width:100%" />
+</a>
+<div style="display:block;font-size:90%">The first row of the decryption process for the Rail Fence Cipher. We have a table with 4 rows because the key is 4, and 28 columns as the ciphertext has length 28.</div>
+</div></div>
+
+<div class="paragraph" style="text-align:justify;">Continuing this row-by-row, we get the successive stages shown below.<br /></div>
+
+<div><div class="wsite-image wsite-image-border-none " style="padding-top:10px;padding-bottom:10px;margin-left:0;margin-right:0;text-align:center">
+<a href='/uploads/1/1/3/4/11345755/5408178_orig.jpg' rel='lightbox' onclick='if (!lightboxLoaded) return false'>
+<img src="/uploads/1/1/3/4/11345755/5408178.jpg?613" alt="Picture" style="width:auto;max-width:100%" />
+</a>
+<div style="display:block;font-size:90%">The second stage in the decryption process.</div>
+</div></div>
+
+<div><div class="wsite-image wsite-image-border-none " style="padding-top:10px;padding-bottom:10px;margin-left:0;margin-right:0;text-align:center">
+<a href='/uploads/1/1/3/4/11345755/6436979_orig.jpg' rel='lightbox' onclick='if (!lightboxLoaded) return false'>
+<img src="/uploads/1/1/3/4/11345755/6436979.jpg?613" alt="Picture" style="width:auto;max-width:100%" />
+</a>
+<div style="display:block;font-size:90%">The third stage in the decryption process.</div>
+</div></div>
+
+<div><div class="wsite-image wsite-image-border-none " style="padding-top:10px;padding-bottom:10px;margin-left:0;margin-right:0;text-align:center">
+<a href='/uploads/1/1/3/4/11345755/8763679_orig.jpg' rel='lightbox' onclick='if (!lightboxLoaded) return false'>
+<img src="/uploads/1/1/3/4/11345755/8763679.jpg?610" alt="Picture" style="width:auto;max-width:100%" />
+</a>
+<div style="display:block;font-size:90%">The fourth and final stage in the decryption process.</div>
+</div></div>
+
+<div class="paragraph" style="text-align:justify;">From this we can now read the plaintext off following the diagonals to get "they are attacking from the north".<br /></div>
+
+<div class="wsite-adsense"> 
+
+            <script type="text/javascript" src="//www.weebly.com/weebly/apps/serveAds.php?type=adsense&elementid=311666461867705700&ineditor=0&subdomain=crypto.interactive-maths.com&pubid=pub-6012495557192475&adformat=728x90&adtype=text_image&bordercolor=CCCCCC&bgcolor=CCCCCC&linkcolor=000000&textcolor=333333&urlcolor=666666"></script></div>
+
+<div><div id="466282629488204276" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml"><a id="disc"></a></div>
+
+
+
+</div>
+
+<div class="paragraph" style="text-align:justify;"><u><font size="4"><strong>Discussion</strong></font></u><br /><span></span>The Rail Fence Cipher is a very easy to apply transposition cipher. However, it is not particularly secure, since there are a limited number of usable keys, especially for short messages (for there to be enough movement of letters, the length of the message needs to be at lease twice the key, but preferably 3 times the key). You could process these quite quickly by hand, and even more quickly with a computer.<br /></div>
+
+<div class="paragraph" style="text-align:justify;">The use of nulls can also have a detrimental effect on the security of the cipher, as an interceptor can use them to identify where the end of the line is, and so have a sensible guess at the key. This can be averted by using a more common letter, such as "E", to fill the null spaces, as it will still be clear to the recipient that these are not part of the message as they will appear at the end of the plaintext. The Rail Fence Cipher can also be utilised without the use of nulls.<br /></div>
+
+<div class="paragraph" style="text-align:justify;">One way to also make the encryption a little bit more secure, is to keep the spaces as characters, and include them in the encryption table. They are treated in exactly the same way as any other letter. For example, using the plaintext "defend the east wall" with a key of 3 again, but this time including spaces we get the table below.<br /></div>
+
+<div><div class="wsite-image wsite-image-border-none " style="padding-top:10px;padding-bottom:10px;margin-left:0;margin-right:0;text-align:center">
+<a href='/uploads/1/1/3/4/11345755/232136_orig.jpg' rel='lightbox' onclick='if (!lightboxLoaded) return false'>
+<img src="/uploads/1/1/3/4/11345755/232136.jpg?520" alt="Picture" style="width:auto;max-width:100%" />
+</a>
+<div style="display:block;font-size:90%">The Rail Fence Cipher with spaces left in the message. Colour is used to emphasise where spaces are, against the blank squares of the table.</div>
+</div></div>
+
+<div class="paragraph" style="text-align:justify;">So the ciphertext would read "DNHAWXEEDTEES ALF&nbsp; TL".<br /></div>
+
+<div class="wsite-adsense"> 
+
+            <script type="text/javascript" src="//www.weebly.com/weebly/apps/serveAds.php?type=adsense&elementid=158918399650895665&ineditor=0&subdomain=crypto.interactive-maths.com&pubid=pub-6012495557192475&adformat=728x90&adtype=text_image&bordercolor=CCCCCC&bgcolor=CCCCCC&linkcolor=000000&textcolor=333333&urlcolor=666666"></script></div>
+
+<div><div id="250898707207314582" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml"><a id="ex"></a></div>
+
+
+
+</div>
+
+<div><div id="987702556896015412" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml"><script language="JavaScript">
+answers = ["RWOUAANWNY","TEUHV  SEAFD!YHONX UX","what should we do?","we shall fight to the very end!"];
+alphabets = ["ABCDEFGHIJKLMNOPQRSTUVWXYZ"," .,?!ABCDEFGHIJKLMNOPQRSTUVWXYZ","ABCDEFGHIJKLMNOPQRSTUVWXYZ"," .,?!ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
+questions = ["Run away now","They have found us!","WSLDHTHUDEOAOWX","WLHTR!EALGT HEYD H I OEV NSFT E"];
+keys = ["3","5","3","4"]
+instructions = ["Remove spaces when encrypting, do not use nulls.","Use nulls.","Remove any nulls that have been used.","N/A"];
+
+window.onload = function() 
+{
+   for (i=1;i<5;i++)
+   {
+      document.getElementById("qs"+i).innerHTML = questions[i - 1];
+      document.getElementById("key"+i).innerHTML = keys[i - 1];
+      document.getElementById("instr"+i).innerHTML = instructions[i - 1];
+      document.getElementById("alpha"+i).innerHTML = "\"" + alphabets[i - 1] + "\"";
+   }
+}
+
+function belongsTo(character, checkstring)
+{
+	p = 0;
+	for (k=0;k<checkstring.length;k++)
+	{
+		if (character == checkstring.substr(k,character.length))
+		{
+			p = p + 1;
+		}
+	}
+	if (p > 0)
+	{
+		return "true";
+	}
+	else
+	{
+		return "false";
+	}
+}
+
+function remove(stringUsed, alphabetUsed)
+{
+	m = 0;
+	newstring = stringUsed;
+	while (m<newstring.length)
+	{
+		if (belongsTo(newstring.substr(m,1),alphabetUsed) == "false")
+		{
+			newstring = newstring.substring(0,m) + newstring.substring(m+1,newstring.length);
+		}
+		else
+		{
+			m++;
+		}
+	}
+	return newstring;
+}
+
+function check(qsNumber)
+{
+   checkDiv = document.getElementById("yourAns"+qsNumber);
+   if (qsNumber == "1" || qsNumber == "2")
+   {
+      checkString = checkDiv.value.toUpperCase();
+      answer = answers[parseInt(qsNumber) - 1];
+      alphabet = alphabets[parseInt(qsNumber) - 1];
+   }
+   else if (qsNumber == "3" || qsNumber == "4")
+   {
+      checkString = checkDiv.value.toLowerCase();
+      answer = answers[parseInt(qsNumber) - 1];
+      alphabet = alphabets[parseInt(qsNumber) - 1].toLowerCase();
+   }
+   if (checkString == answer || remove(checkString,alphabet) == remove(answer,alphabet))
+   {
+      checkDiv.style = "background-color: lightgreen; width:90%";
+   }
+   else if (checkString == "")
+	{
+		checkDiv.style = "background-color: white; width:90%";
+	}
+	else
+	{
+		checkDiv.style = "background-color: pink; width:90%";
+	}
+   
+}
+
+function show(qsNumber)
+{
+   checkDiv = document.getElementById("ans"+qsNumber);
+   if (document.getElementById("showBtn"+qsNumber).value == "Show Answer")
+   {
+      checkDiv.innerHTML = answers[parseInt(qsNumber) - 1];
+      document.getElementById("showBtn"+qsNumber).value = "Hide Answer";
+   }
+   else if (document.getElementById("showBtn"+qsNumber).value == "Hide Answer")
+   {
+      checkDiv.innerHTML = "";
+      document.getElementById("showBtn"+qsNumber).value = "Show Answer";
+   }
+}
+
+function change(qsNumber)
+{
+   checkDiv = document.getElementById("yourAns"+qsNumber);
+   checkDiv.style = "background-color: white; width:90%";
+}
+
+</script>
+
+<div style="background-color:lightgray;max-width:800px">
+<a href="http://crypto.interactive-maths.com/"><image src="http://crypto.interactive-maths.com/uploads/1/1/3/4/11345755/cc-logo_orig.jpg" width = "200px" align="right"></a>
+
+<div>
+    <form>
+      <fieldset data-role="controlgroup" style="min-width:200px">
+            <br><div style="color:black">For the first two questions, use the given alphabet to encrypt the message using the Rail Fence Cipher. For the second two questions, use the alphabet to decrypt the ciphertext.</div><br>
+      </fieldset>
+      <fieldset data-role="controlgroup">
+        <legend style="color:black">Question 1 </legend>
+        <div style="display:inline-block;width:100%;min-width:200px">
+            <div style="color:black">Alphabet: <div id="alpha1" style="display:inline-block"></div></div><br>
+            <div style="color:black">Plaintext: <div id="qs1" style="display:inline-block"></div></div><br>
+            <div style="color:black">Key: <div id="key1" style="display:inline-block"></div></div><br>
+            <div style="color:black">Special Instructions: <div id="instr1" style="display:inline-block"></div></div><br>
+            <div style="color:black">Ciphertext: </div><div id="ans1" style="color:black"></div>
+            <textarea id="yourAns1" style="width:90%" rows="1" oninput="change(1)"></textarea>
+        </div>
+        <div style="display:inline-block;vertical-align:top">
+            <input type="button" id="checkBtn1" value="Check Answer" onclick="check(1)" class="button button1">
+            <input type="button" id="showBtn1" value="Show Answer" onclick="show(1)" class="button button3">
+        </div>
+      </fieldset>
+      <fieldset data-role="controlgroup">
+        <legend style="color:black">Question 2 </legend>
+        <div style="display:inline-block;width:100%;min-width:200px">
+            <div style="color:black">Alphabet: <div id="alpha2" style="display:inline-block"></div></div><br>
+            <div style="color:black">Plaintext: <div id="qs2" style="display:inline-block"></div></div><br>
+            <div style="color:black">Key: <div id="key2" style="display:inline-block"></div></div><br>
+            <div style="color:black">Special Instructions: <div id="instr2" style="display:inline-block"></div></div><br>
+            <div style="color:black">Ciphertext: </div><div id="ans2" style="color:black"></div>
+            <textarea id="yourAns2" style="width:90%" rows="1" oninput="change(2)"></textarea>
+        </div>
+        <div style="display:inline-block;vertical-align:top">
+            <input type="button" id="checkBtn2" value="Check Answer" onclick="check(2)" class="button button1">
+            <input type="button" id="showBtn2" value="Show Answer" onclick="show(2)" class="button button3">
+        </div>
+      </fieldset>
+<fieldset data-role="controlgroup">
+        <legend style="color:black">Question 3 </legend>
+        <div style="display:inline-block;width:100%;min-width:200px">
+            <div style="color:black">Alphabet: <div id="alpha3" style="display:inline-block"></div></div><br>
+            <div style="color:black">Ciphertext: <div id="qs3" style="display:inline-block"></div></div><br>
+            <div style="color:black">Key: <div id="key3" style="display:inline-block"></div></div><br>
+            <div style="color:black">Special Instructions: <div id="instr3" style="display:inline-block"></div></div><br>
+            <div style="color:black">Plaintext: </div><div id="ans3" style="color:black"></div>
+            <textarea id="yourAns3" style="width:90%" rows="1" oninput="change(3)"></textarea>
+        </div>
+        <div style="display:inline-block;vertical-align:top">
+            <input type="button" id="checkBtn3" value="Check Answer" onclick="check(3)" class="button button1">
+            <input type="button" id="showBtn3" value="Show Answer" onclick="show(3)" class="button button3">
+        </div>
+      </fieldset>
+      <fieldset data-role="controlgroup">
+        <legend style="color:black">Question 4 </legend>
+        <div style="display:inline-block;width:100%;min-width:200px">
+            <div style="color:black">Alphabet: <div id="alpha4" style="display:inline-block"></div></div><br>
+            <div style="color:black">Ciphertext: <div id="qs4" style="display:inline-block"></div></div><br>
+            <div style="color:black">Key: <div id="key4" style="display:inline-block"></div></div><br>
+            <div style="color:black">Special Instructions: <div id="instr4" style="display:inline-block"></div></div><br>
+            <div style="color:black">Plaintext: </div><div id="ans4" style="color:black"></div>
+            <textarea id="yourAns4" style="width:90%" rows="1" oninput="change(4)"></textarea>
+        </div>
+        <div style="display:inline-block;vertical-align:top">
+            <input type="button" id="checkBtn4" value="Check Answer" onclick="check(4)" class="button button1">
+            <input type="button" id="showBtn4" value="Show Answer" onclick="show(4)" class="button button3">
+        </div>
+      </fieldset>
+
+</form>
+  </div>
+  
+  
+  <div align = "center" style = "color:purple;font-size:25px"><label>Crypto Corner © Daniel Rodriguez-Clark 2019</label></div>
+</div>
+
+</div>
+
+
+
+</div>
+
+<div><div style="height: 20px; overflow: hidden; width: 100%;"></div>
+<hr class="styled-hr" style="width:100%;"></hr>
+<div style="height: 20px; overflow: hidden; width: 100%;"></div></div>
+
+<div><div class="wsite-multicol"><div class="wsite-multicol-table-wrap" style="margin:0 -15px;">
+	<table class="wsite-multicol-table">
+		<tbody class="wsite-multicol-tbody">
+			<tr class="wsite-multicol-tr">
+				<td class="wsite-multicol-col" style="width:59.154929577465%; padding:0 15px;">
+					
+						
+
+<div style="text-align:left;"><div style="height: 10px; overflow: hidden;"></div>
+<a class="wsite-button wsite-button-small wsite-button-normal" href="/simple-transposition-ciphers.html" >
+<span class="wsite-button-inner">Previous Page: Simple Transposition</span>
+</a>
+<div style="height: 10px; overflow: hidden;"></div></div>
+
+
+					
+				</td>				<td class="wsite-multicol-col" style="width:40.845070422535%; padding:0 15px;">
+					
+						
+
+<div style="text-align:right;"><div style="height: 10px; overflow: hidden;"></div>
+<a class="wsite-button wsite-button-small wsite-button-normal" href="/route-cipher.html" >
+<span class="wsite-button-inner">Next Page: Route Cipher</span>
+</a>
+<div style="height: 10px; overflow: hidden;"></div></div>
+
+
+					
+				</td>			</tr>
+		</tbody>
+	</table>
+</div></div></div>
+			</div>
+		</div>
+      </div>
+
+	</div>
+</div>
+
+</div>
+
+    </div>
+
+    <div class="footer-wrap">
+      <div class="container">
+        <div class="footer"><div class='wsite-elements wsite-footer'>
+<div><div class="wsite-multicol"><div class="wsite-multicol-table-wrap" style="margin:0 -15px;">
+	<table class="wsite-multicol-table">
+		<tbody class="wsite-multicol-tbody">
+			<tr class="wsite-multicol-tr">
+				<td class="wsite-multicol-col" style="width:35.662628911756%; padding:0 15px;">
+					
+						
+
+<div class="paragraph" style="text-align:left;"><font size="4"><u><strong>Information</strong></u><br /></font><ul><li><font size="4"><a title="" href="/about-me.html"><span>About Me</span></a></font></li><li><font size="4"><a title="" href="/contact-me.html"><span>Contact Me</span></a></font></li><li><font size="4"><a title="" href="/legal.html"><span>Legal</span></a><span></span></font></li><li><font size="4"><a title="" href="/glossary.html"><span>Glossary</span></a></font></li><li><font size="4"><span><a title="" href="/help-with-activities.html">Help with Activities</a><br /></span></font></li><li><font size="4"><span><a title="" href="/educational-uses.html">Educational Uses</a></span></font></li><li><font size="4"><span><a title="" href="/downloadable-resources.html">Downloadble Resources</a><br /></span></font></li></ul></div>
+
+
+					
+				</td>				<td class="wsite-multicol-col" style="width:35.956148491277%; padding:0 15px;">
+					
+						
+
+<div class="paragraph" style="text-align:left;"><font size="3">Crypto Corner is a subsiduary of <a title="" target="_blank" href="http://www.interactive-maths.com">www.interactive-maths.com</a><br /></font></div>
+
+<div class="paragraph" style="text-align:right;">&copy;2013 - 2023 Daniel Rodriguez-Clark<br />All rights reserved</div>
+
+
+					
+				</td>				<td class="wsite-multicol-col" style="width:28.381222596967%; padding:0 15px;">
+					
+						
+
+<div class="paragraph" style="text-align:center;"><font size="3"><strong><font color="#33FF33">If you have found Crypto Corner useful, then please consider supporting my work using the button below. Thanks!</font></strong></font></div>
+
+<div><div id="928722073756989494" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml"><script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="interactivemaths" data-color="#BD5FFF" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#ffffff" data-coffee-color="#FFDD00" ></script></div>
+
+
+
+</div>
+
+
+					
+				</td>			</tr>
+		</tbody>
+	</table>
+</div></div></div></div></div>
+      </div><!-- end container -->
+    </div><!-- end footer-wrap -->
+  </div><!-- /.wrapper -->
+
+  <div id="navMobile" class="nav mobile-nav">
+    <label class="hamburger"><span></span></label>
+    <ul class="wsite-menu-default">
+    		<li id="pg610206558414627000" class="wsite-menu-item-wrap">
+    			<a
+    						href="/"
+    				class="wsite-menu-item"
+    				>
+    				Home
+    			</a>
+    			<div class="wsite-menu-wrap" style="display:none">
+	<ul class="wsite-menu">
+		<li id="wsite-nav-774133273423841981"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/challenge.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Crypto Corner Challenges
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-744560601490918658"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/glossary.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Glossary
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-862016763229752300"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/help-with-activities.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Help with Activities
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-159980943888053810"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/educational-uses.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Educational Uses
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-957083175202498317"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/downloadable-resources.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Downloadable Resources
+		</span>
+	</a>
+	
+</li>
+
+	</ul>
+</div>
+
+    		</li>
+    		<li id="pg307273006836702862" class="wsite-menu-item-wrap">
+    			<a
+    						href="/introduction-to-cryptography.html"
+    				class="wsite-menu-item"
+    				>
+    				Introduction to Cryptography
+    			</a>
+    			<div class="wsite-menu-wrap" style="display:none">
+	<ul class="wsite-menu">
+		<li id="wsite-nav-827217038965638522"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/steganography.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Steganography
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-413770729179351323"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/codes-and-ciphers.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Codes and Ciphers
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-299714350867997185"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/conventions-in-cryptography.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Conventions in Cryptography
+		</span>
+	</a>
+	
+</li>
+
+	</ul>
+</div>
+
+    		</li>
+    		<li id="pg645437683170360706" class="wsite-menu-item-wrap">
+    			<a
+    						href="/monoalphabetic-substitution-ciphers.html"
+    				class="wsite-menu-item"
+    				>
+    				Monoalphabetic Substitution Ciphers
+    			</a>
+    			<div class="wsite-menu-wrap" style="display:none">
+	<ul class="wsite-menu">
+		<li id="wsite-nav-337841674829597170"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/atbash-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Atbash Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-219541603477703399"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/pigpen-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Pigpen Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-367749416539778036"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/caesar-shift-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Caesar Shift Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-950214305874531815"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/affine-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Affine Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-300113580848924474"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/mixed-alphabet-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Mixed Alphabet Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-363966700817716263"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/other-examples1.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Other Examples
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-761808592629466466"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/frequency-analysis-breaking-the-code.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Frequency Analysis: Breaking the Code
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-335476249266277973"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/homophonic-substitution.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Homophonic Substitution
+		</span>
+	</a>
+	
+</li>
+
+	</ul>
+</div>
+
+    		</li>
+    		<li id="pg127821211805027989" class="wsite-menu-item-wrap">
+    			<a
+    						href="/simple-transposition-ciphers.html"
+    				class="wsite-menu-item"
+    				>
+    				Simple Transposition Ciphers
+    			</a>
+    			<div class="wsite-menu-wrap" style="display:none">
+	<ul class="wsite-menu">
+		<li id="wsite-nav-610606302467344150"
+	class="wsite-menu-subitem-wrap wsite-nav-current"
+	>
+	<a
+				href="/rail-fence-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Rail Fence Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-451089397530960032"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/route-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Route Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-634460164318781589"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/columnar-transposition-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Columnar Transposition Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-457838684978832036"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/myszkowski-transposition-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Myszkowski Transposition Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-465971294279896042"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/permutation-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Permutation Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-569121963985755645"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/anagramming-jumbling-words.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Anagramming: Jumbling words
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-396640943364451814"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/combining-monoalphabetic-and-simple-transposition-ciphers.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Combining Monoalphabetic and Simple Transposition Ciphers
+		</span>
+	</a>
+	
+</li>
+
+	</ul>
+</div>
+
+    		</li>
+    		<li id="pg420122556836533021" class="wsite-menu-item-wrap">
+    			<a
+    						href="/polyalphabetic-substitution-ciphers.html"
+    				class="wsite-menu-item"
+    				>
+    				Polyalphabetic Substitution Ciphers
+    			</a>
+    			<div class="wsite-menu-wrap" style="display:none">
+	<ul class="wsite-menu">
+		<li id="wsite-nav-769353447380890913"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/vigenegravere-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Vigen&egrave;re Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-625250352999640259"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/kasiski-analysis-breaking-the-code.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Kasiski Analysis: Breaking the Code
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-155698535368560576"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/autokey-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Autokey Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-413035697300632928"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/other-examples.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Other Examples
+		</span>
+	</a>
+	
+</li>
+
+	</ul>
+</div>
+
+    		</li>
+    		<li id="pg435603953337742292" class="wsite-menu-item-wrap">
+    			<a
+    						href="/fractionating-ciphers.html"
+    				class="wsite-menu-item"
+    				>
+    				Fractionating Ciphers
+    			</a>
+    			<div class="wsite-menu-wrap" style="display:none">
+	<ul class="wsite-menu">
+		<li id="wsite-nav-868921718925519230"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/polybius-square.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Polybius Square
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-193872488185057447"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/straddling-checkerboard.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Straddling Checkerboard
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-593103961400116161"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/transposing-fractionated-text.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Transposing Fractionated Text
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-242820033469168494"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/other-ways-to-alter-fractionated-text.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Other ways to Alter Fractionated Text
+		</span>
+	</a>
+	
+</li>
+
+	</ul>
+</div>
+
+    		</li>
+    		<li id="pg797448386188867521" class="wsite-menu-item-wrap">
+    			<a
+    						href="/digraph-substitution-ciphers.html"
+    				class="wsite-menu-item"
+    				>
+    				Digraph Substitution Ciphers
+    			</a>
+    			<div class="wsite-menu-wrap" style="display:none">
+	<ul class="wsite-menu">
+		<li id="wsite-nav-537436535542979587"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/playfair-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Playfair Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-916011651136230655"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/two-square-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Two-Square Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-860473149554495085"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/four-square-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Four-Square Cipher
+		</span>
+	</a>
+	
+</li>
+<li id="wsite-nav-385031735791548811"
+	class="wsite-menu-subitem-wrap "
+	>
+	<a
+				href="/hill-cipher.html"
+		class="wsite-menu-subitem"
+		>
+		<span class="wsite-menu-title">
+			Hill Cipher
+		</span>
+	</a>
+	
+</li>
+
+	</ul>
+</div>
+
+    		</li>
+    </ul>
+  </div>
+
+  <script type="text/javascript" src="/files/theme/plugins.js?1525278237"></script>
+  <script type="text/javascript" src="/files/theme/custom.js?1525278237"></script>
+    <div id="customer-accounts-app"></div>
+    <script src="//cdn2.editmysite.com/js/site/main-customer-accounts-site.js?buildTime=1695407040"></script>
+
+		<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-38543576-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script><script type="text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-7870337-1']);
+	_gaq.push(['_setDomainName', 'none']);
+	_gaq.push(['_setAllowLinker', true]);
+
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		// NOTE: keep the [1] if you replace this code. Otherwise cookie banner scripts won't be first on the page
+		var s = document.getElementsByTagName('script')[1]; s.parentNode.insertBefore(ga, s);
+	})();
+
+	_W.Analytics = _W.Analytics || {'trackers': {}};
+	_W.Analytics.trackers.wGA = '_gaq';
+</script>
+
+<script type="text/javascript" async=1>
+	// NOTE: keep the getElementsByTagName(o)**[1]** if you replace this code. Otherwise cookie banner scripts won't be first on the page
+	;(function(p,l,o,w,i,n,g){if(!p[i]){p.GlobalSnowplowNamespace=p.GlobalSnowplowNamespace||[];
+			p.GlobalSnowplowNamespace.push(i);p[i]=function(){(p[i].q=p[i].q||[]).push(arguments)
+			};p[i].q=p[i].q||[];n=l.createElement(o);g=l.getElementsByTagName(o)[1];n.async=1;
+			n.src=w;g.parentNode.insertBefore(n,g)}}(window,document,'script','//cdn2.editmysite.com/js/wsnbn/snowday262.js','snowday'));
+
+	var r = [99, 104, 101, 99, 107, 111, 117, 116, 46, 40, 119, 101, 101, 98, 108, 121, 124, 101, 100, 105, 116, 109, 121, 115, 105, 116, 101, 41, 46, 99, 111, 109];
+	var snPlObR = function(arr) {
+		var s = '';
+		for (var i = 0 ; i < arr.length ; i++){
+			s = s + String.fromCharCode(arr[i]);
+		}
+		return s;
+	};
+	var s = snPlObR(r);
+
+	var regEx = new RegExp(s);
+
+	_W.Analytics = _W.Analytics || {'trackers': {}};
+	_W.Analytics.trackers.wSP = 'snowday';
+	_W.Analytics.user_id = '11345755';
+	_W.Analytics.site_id = '591060356522663677';
+
+
+	(function(app_id, ec_hostname, discover_root_domain) {
+		var track = window[_W.Analytics.trackers.wSP];
+		if (!track) return;
+		track('newTracker', app_id, ec_hostname, {
+			appId: app_id,
+			post: true,
+			platform: 'web',
+			discoverRootDomain: discover_root_domain,
+			cookieName: '_snow_',
+			contexts: {
+				webPage: true,
+				performanceTiming: true,
+				gaCookies: true
+			},
+			crossDomainLinker: function (linkElement) {
+				return regEx.test(linkElement.href);
+			},
+			respectDoNotTrack: true
+		});
+		track('trackPageView', _W.Analytics.user_id+':'+_W.Analytics.site_id, _W.Analytics.spContexts);
+		track('crossDomainLinker', function (linkElement) {
+			return regEx.test(linkElement.href);
+		});
+	})(
+		'_wn',
+		'ec.editmysite.com',
+		true
+	);
+</script>
+
+
+
+
+
+<script>
+	(function(jQuery) {
+		try {
+			if (jQuery) {
+				jQuery('div.blog-social div.fb-like').attr('class', 'blog-social-item blog-fb-like');
+				var $commentFrame = jQuery('#commentArea iframe');
+				if ($commentFrame.length > 0) {
+					var frameHeight = jQuery($commentFrame[0].contentWindow.document).height() + 50;
+					$commentFrame.css('min-height', frameHeight + 'px');
+				}
+				if (jQuery('.product-button').length > 0){
+					jQuery(document).ready(function(){
+						jQuery('.product-button').parent().each(function(index, product){
+							if(jQuery(product).attr('target') == 'paypal'){
+								if (!jQuery(product).find('> [name="bn"]').length){
+									jQuery('<input>').attr({
+										type: 'hidden',
+										name: 'bn',
+										value: 'DragAndDropBuil_SP_EC'
+									}).appendTo(product);
+								}
+							}
+						});
+					});
+				}
+			}
+			else {
+				// Prototype
+				$$('div.blog-social div.fb-like').each(function(div) {
+					div.className = 'blog-social-item blog-fb-like';
+				});
+				$$('#commentArea iframe').each(function(iframe) {
+					iframe.style.minHeight = '410px';
+				});
+			}
+		}
+		catch(ex) {}
+	})(window._W && _W.jQuery);
+</script>
+
+<script>
+	window._W.isEUUser = true;
+	window._W.showCookieToAll = "";
+</script>
+
+<script>
+	(function(jQuery) {
+		try {
+			function forceShowCcLinks() {
+				var ccLinks = document.querySelector('.cc_links');
+				if (!ccLinks) {
+					return;
+				}
+
+				var ccLinksVisible = jQuery(ccLinks).is(':visible');
+				if (ccLinksVisible) {
+					return;
+				}
+
+
+				ccLinks.style.display = 'block';
+
+				var ccParent = ccLinks.parentElement;
+
+				var ccParentVisible = jQuery(ccParent).is(':visible');
+				if (ccParentVisible) {
+					return;
+				}
+
+				ccParent.style.display = 'block';
+
+				var ccGrandparent = ccParent.parentElement;
+				var ccGrandparentVisible = jQuery(ccGrandparent).is(':visible');
+				if (ccGrandparentVisible) {
+					return;
+				}
+				ccGrandparent.style.display = 'block';
+
+			}
+
+			function forceShowCcLinksForever() {
+				var tenSeconds = 10000;
+				forceShowCcLinks();
+				setTimeout(forceShowCcLinksForever, tenSeconds);
+			}
+
+			jQuery(document).ready(forceShowCcLinksForever);
+		}
+		catch(ex) {}
+	})(window._W && _W.jQuery);
+</script>
+
+
+	</body>
+</html>
