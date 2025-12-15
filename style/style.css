@@ -237,11 +237,6 @@ button:disabled {
     box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
 }
 
-.brute-result.best {
-    border-color: #48bb78;
-    background: linear-gradient(to right, #f0fff4, white);
-}
-
 .result-header {
     display: flex;
     justify-content: space-between;
@@ -257,21 +252,6 @@ button:disabled {
     border-radius: 12px;
     font-size: 13px;
     font-weight: 600;
-}
-
-.best-badge {
-    display: inline-block;
-    padding: 4px 12px;
-    background: #48bb78;
-    color: white;
-    border-radius: 12px;
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.score {
-    font-size: 13px;
-    color: #718096;
 }
 
 .result-text {
